@@ -51,20 +51,6 @@ endif;
 
 
 /*------------------------------
-Если был передан GET
--------------------------------*/
-//if($_GET["method_name"] == "delete" && is_numeric($_GET["ID"])):
-//    $resDb = db_delete($table, "ID =".$_GET["ID"]);
-//    if($resDb["error"]){$errors[] = $resDb["error"]; }
-//endif;
-//
-//if($_GET["method_name"] == "edit" && is_numeric($_GET["ID"])):
-//    $resItem = db_row("SELECT * FROM ".$table." WHERE ID=".$_GET["ID"])["item"];
-//    if($resItem){$resItem["meta"] = json_decode($resItem["meta"], true);}
-//endif;
-
-
-/*------------------------------
 Вывод записей
 -------------------------------*/
 $Items = db_select("SELECT * FROM ".$table." ORDER BY nomer", true)["items"];
@@ -106,6 +92,7 @@ $socialTypes = ["tw" => "Twitter", "fb" => "Facebook", "be" => "Behance", "in" =
         <form action="<? echo $thisPage ?>" method="post" enctype="multipart/form-data" name="myForm" target="_self">
             <? $method = (@$resItem) ? "edit" : "add"; ?>
             <input type="hidden" name="method_name" value="<? echo $method; ?>"/>
+            <input type="hidden" name="referer" value="<? echo $referer; ?>"/>
             <input type="hidden" name="ID" value="<? echo @$resItem["ID"]; ?>"/>
 
             <? foreach ($socialTypes as $item => $val) {
