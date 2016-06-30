@@ -6,7 +6,6 @@ require_once("functions/auth.php");
 
 
 ?>
-
 <!--A Design by W3layouts
 Author: W3layout
 Author URL: http://w3layouts.com

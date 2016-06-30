@@ -1,28 +1,53 @@
 <?php
 require_once("../functions/DB.php");
 require_once("../functions/auth.php");
+require_once("../functions/path.php");
 require_once("../functions/proverki.php");
 
 $Admin = is_admin();
-if(!$Admin){ exit("Нет прав доступа"); }
+if (!$Admin) {
+    exit("Нет прав доступа");
+}
 
-$table = "categories";
-$referer = ($_POST["referer"])? $_POST["referer"]: $_SERVER["HTTP_REFERER"];
-
+$table      = "socials";
+$referer    = ($_POST["referer"]) ? $_POST["referer"] : $_SERVER["HTTP_REFERER"];
+$thisPage   = path_withoutGet();
 
 /*------------------------------
 Ф-ии
 -------------------------------*/
-
+function goodKeys($arr, $colName){
+    $cols = array_column($arr, $colName);
+    $res  = array_combine($cols, $arr);
+    return $res;
+}
 
 /*------------------------------
 Если была передана форма
 -------------------------------*/
-if(isset($_POST["method_name"])):
-//    $resWrite = write_to_db($_POST["method_name"]);
-//    if($resWrite["error"]){$errors[] = $resWrite["error"]; }
-endif;
+if (isset($_POST["method_name"])):
 
+    switch ($_POST["method_name"]):
+        case "add":
+
+            $arr = [];
+
+            foreach ($_POST["item_type"] as $item => $val) {
+                $arr[] = [
+                    "item_type" => proverka1($item)
+                    ,"item_val" => urlencode(proverka1($val))
+                ];
+            }
+
+            $resDb = db_duplicate_update($table, $arr);
+            $forError = ($resDb["error"])? $resDb["error"] : null;
+
+        break;
+
+    endswitch;
+
+
+endif;
 
 
 /*------------------------------
@@ -42,8 +67,13 @@ endif;
 /*------------------------------
 Вывод записей
 -------------------------------*/
-//$Items = db_select("SELECT * FROM ".$table." ORDER BY title", true)["items"];
+$Items = db_select("SELECT * FROM ".$table." ORDER BY nomer", true)["items"];
+$Items = goodKeys($Items, "item_type");
 
+/*------------------------------
+Дополнительные данные
+-------------------------------*/
+$socialTypes = ["tw" => "Twitter", "fb" => "Facebook", "be" => "Behance", "in" => "Linkedin"];
 
 ?>
 <!DOCTYPE html>
@@ -61,41 +91,55 @@ endif;
 
 <body>
 
-<div class="forError"><? if($errors){var_dump($errors);} ?></div>
+<div class="forError"><? if ($forError) {
+        var_dump($forError);
+    } ?></div>
 
 <a href="<? echo $referer; ?>" class="return" title="Вернуться"><i class="material-icons">&#xE31B;</i></a>
 <a href="#" class="formTymbler mt25"><span>Добавить элемент</span></a>
 
-<? $tmp = (!$resItem)? "hidden": null; ?>
+<? $tmp = (!$resItem) ? "hidden" : null; ?>
 <section class="addForm mt15" <? echo $tmp; ?>>
     <div class="wr">
-        <form action="/13-shop/adm/categories.php" method="post" enctype="multipart/form-data" name="myForm" target="_self">
+        <form action="<? echo $thisPage ?>" method="post" enctype="multipart/form-data" name="myForm" target="_self">
             <? $method = (@$resItem) ? "edit" : "add"; ?>
             <input type="hidden" name="method_name" value="<? echo $method; ?>"/>
             <input type="hidden" name="ID" value="<? echo @$resItem["ID"]; ?>"/>
 
-            <input type="text" name="title" value="<? echo @$resItem["title"]; ?>" placeholder="title"/><br><br>
+            <? foreach ($socialTypes as $item => $val) {
+               $tmp = ($Items[$item]["item_val"])? urldecode($Items[$item]["item_val"]) : null;
+            ?>
+                <div class="row mb10">
+                    <div class="title"><? echo $val ?></div>
+                    <input type="text" name="item_type[<? echo $item ?>]" value="<? echo $tmp; ?>">
+                </div>
 
-            <input name="submit" type="submit" value="готово"/>
+            <? } ?>
+
+            <input type="submit" value="готово"/>
         </form>
     </div>
 </section>
 
 
-<? if($Items): ?>
-<section class="list">
-    <ul class="pageItems">
-        <? foreach ($Items as $item) { ?>
-        <li>
-            <a href="#" class="pageItem"><? echo $item["title"] ?></a>
-            <div class="settings">
-                <a href="/13-shop/adm/categories.php?method_name=edit&ID=<? echo $item["ID"] ?>" class="edit">Редактировать</a>
-                <a href="/13-shop/adm/categories.php?method_name=delete&ID=<? echo $item["ID"] ?>" class="delete">удалить</a>
-            </div>
-        </li>
-        <? } ?>
-    </ul>
-</section>
+<? if ($Items): ?>
+    <section class="list">
+        <ul class="pageItems">
+            <? foreach ($Items as $item) { ?>
+                <li>
+                    <a href="#" class="pageItem"><? echo $item["title"] ?></a>
+                    <div class="settings">
+                        <a href="/13-shop/adm/categories.php?method_name=edit&ID=<? echo $item["ID"] ?>" class="edit">
+                            Редактировать
+                        </a>
+                        <a href="/13-shop/adm/categories.php?method_name=delete&ID=<? echo $item["ID"] ?>" class="delete">
+                            удалить
+                        </a>
+                    </div>
+                </li>
+            <? } ?>
+        </ul>
+    </section>
 <? endif; ?>
 
 
