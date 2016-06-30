@@ -1,6 +1,6 @@
 <?php
 
-$DB_CONNECT_SETTINGS = ["host" => "127.0.0.1", "user" => "root", "pass" => "", "dbName" => "e-shop1"];
+$DB_CONNECT_SETTINGS = ["host" => "127.0.0.1", "user" => "root", "pass" => "", "dbName" => "e-shop2"];
 
 $DB = new mysqli(
          $DB_CONNECT_SETTINGS["host"]
