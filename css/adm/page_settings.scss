@@ -1,0 +1,65 @@
+@charset "UTF-8";
+@import "../settings";
+
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+
+  font-family: Verdana, sans-serif;
+  font-size: 14px;
+  background: #e0e0e0;
+}
+
+.wr{
+  max-width: 1024px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.return{
+  display:block;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+
+  &:hover{
+    background: rgba(#000, 0.1);
+    color: white;
+  }
+}
+.formTymbler{
+  display:block;
+  text-align: center;
+  font-size: 16px;
+  color: $red;
+  text-decoration: none;
+
+  span{
+    display: inline-block;
+    border-bottom: 1px dashed;
+  }
+
+
+  &:hover, &.active{
+    color: darken($red, 15%);
+  }
+}
+
+
+/*-----------------------------------
+Настройки для форм
+-----------------------------------*/
+input{
+  display: inline-block;
+
+  &[type='text']{
+    padding: 5px 10px;
+    outline: none;
+    font-size: 14px;
+  }
+  &[type='submit']{
+    @extend input[type='text'];
+  }
+
+}

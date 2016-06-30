@@ -26,6 +26,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="css/admElements.css" rel="stylesheet">
+
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
 <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
@@ -734,7 +737,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 			</div>
 		</div>
-		<!--//footer-->
+
+
+
+
+
+
+
+<? if(is_admin()): ?>
+	<!--Админ панель-->
+	<section id="admBar">
+		<a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
+		<ul class="listBtns">
+			<li>
+				<a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+			</li>
+			<li>
+				<a href="adm/social_btns.php">Кнопки соц. сетей</a>
+			</li>
+		</ul>
+
+
+	</section>
+<? endif; ?>
+
+
+
+
+
+
+
+<!--//footer-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
@@ -749,6 +782,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		});
 		</script>
 
+<!--scripts-->
+<script src="js/face/admBar.js"></script>
 
 </body>
 </html>
