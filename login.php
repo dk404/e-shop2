@@ -14,8 +14,7 @@ Logout
 -----------------------------------*/
 if($_GET["logout"] && is_auth())
 {
-	setcookie("ID", $resDb["ID"], strtotime("-1 day"), "/");
-	setcookie("token", $resDb["pass"], strtotime("-1 day"), "/");
+	auth_exit();
 
 	echo "
 		<script>
