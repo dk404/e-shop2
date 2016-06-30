@@ -7,6 +7,8 @@
 $darkGray:#37363a;
 $blue: #4bbaff;
 $red: #f67878;
+$darkRed: darken($red, 15%);
+$almostWhite: darken(white, 5%);
 
 %flex{
   display: flex;

@@ -63,3 +63,26 @@ input{
   }
 
 }
+
+/*-----------------------------------
+Настройки для списка элементов
+-----------------------------------*/
+ul.pageItems{
+  @extend %ul;
+
+  &>li{
+    @extend %flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px;
+    border-bottom: 1px solid $almostWhite;
+
+    &>a{
+      color: $blue;
+      
+      &:hover{
+        color: darken($blue, 15%);
+      }
+    }
+  }
+}

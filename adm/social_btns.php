@@ -35,7 +35,7 @@ if (isset($_POST["method_name"])):
             foreach ($_POST["item_type"] as $item => $val) {
                 $arr[] = [
                     "item_type" => proverka1($item)
-                    ,"item_val" => urlencode(proverka1($val))
+                    ,"item_val" => (!empty($val))? urlencode(proverka1($val)) : null
                 ];
             }
 
@@ -68,7 +68,8 @@ endif;
 Вывод записей
 -------------------------------*/
 $Items = db_select("SELECT * FROM ".$table." ORDER BY nomer", true)["items"];
-$Items = goodKeys($Items, "item_type");
+if($Items){$Items = goodKeys($Items, "item_type");}
+
 
 /*------------------------------
 Дополнительные данные
@@ -83,6 +84,7 @@ $socialTypes = ["tw" => "Twitter", "fb" => "Facebook", "be" => "Behance", "in" =
     <title></title>
     <link rel="shortcut icon" href=""/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="all" href="../js/sort/jquery-ui.min.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="../css/adm/page_settings.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -123,27 +125,27 @@ $socialTypes = ["tw" => "Twitter", "fb" => "Facebook", "be" => "Behance", "in" =
 
 
 <? if ($Items): ?>
-    <section class="list">
-        <ul class="pageItems">
-            <? foreach ($Items as $item) { ?>
-                <li>
-                    <a href="#" class="pageItem"><? echo $item["title"] ?></a>
-                    <div class="settings">
-                        <a href="/13-shop/adm/categories.php?method_name=edit&ID=<? echo $item["ID"] ?>" class="edit">
-                            Редактировать
-                        </a>
-                        <a href="/13-shop/adm/categories.php?method_name=delete&ID=<? echo $item["ID"] ?>" class="delete">
-                            удалить
-                        </a>
-                    </div>
-                </li>
-            <? } ?>
-        </ul>
+    <section class="list mt50">
+        <div class="wr">
+            <ul class="pageItems sort_cont" data-js-sort="<? echo $table; ?>">
+                <? foreach ($Items as $item) {
+                    if(empty($item["item_val"])){continue;}
+                    $href = urldecode($item["item_val"]);
+                    $tmp  = substr($href, 0, 30);
+                    ?>
+                    <li id="<? echo "nomer_".$item["ID"]; ?>">
+                        <a href="<? echo $href ?>" class="pageItem" target="_blank"><? echo "(". $item["item_type"] .") ".$tmp; ?></a>
+                    </li>
+                <? } ?>
+            </ul>
+        </div>
     </section>
 <? endif; ?>
 
 
 <script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/sort/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/sort/for_sort.js"></script>
 <script type="text/javascript" src="../js/adm/page_settings.js"></script>
 </body>
 </html>
