@@ -2,6 +2,10 @@
 require_once("DB.php");
 require_once("proverki.php");
 
+/**
+ * Авторизовани или нет
+ * @return array
+ */
 function is_auth(){
     $token = proverka1($_COOKIE["token"]);
     if(!is_numeric($_COOKIE["ID"]) OR !$token){return false;}

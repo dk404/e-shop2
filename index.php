@@ -1,4 +1,13 @@
-<!--A Design by W3layouts 
+<?
+require_once("functions/path.php");
+require_once("functions/DB.php");
+require_once("functions/auth.php");
+
+
+
+?>
+
+<!--A Design by W3layouts
 Author: W3layout
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -17,6 +26,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="css/admElements.css" rel="stylesheet">
+
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
 <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
@@ -55,7 +67,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="container">
 		<div class="head">
 			<div class=" logo">
-				<a href="index.html"><img src="images/logo.png" alt=""></a>	
+				<a href="index.php"><img src="images/logo.png" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -63,9 +75,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 		<div class="col-sm-5 col-md-offset-2  header-login">
 					<ul >
-						<li><a href="login.html">Login</a></li>
-						<li><a href="register.html">Register</a></li>
-						<li><a href="checkout.html">Checkout</a></li>
+						<? if(is_auth()){ ?>
+							<li><a href="login.php?logout=1">Logout</a></li>
+							<li><a href="checkout.html">Checkout</a></li>
+						<? }else{ ?>
+							<li><a href="login.php">Login</a></li>
+							<li><a href="register.php">Register</a></li>
+							<li><a href="checkout.html">Checkout</a></li>
+
+						<? } ?>
 					</ul>
 				</div>
 				
@@ -103,7 +121,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
-            <li><a class="color" href="index.html">Home</a></li>
+            <li><a class="color" href="index.php">Home</a></li>
             
     		<li class="dropdown mega-dropdown active">
 			    <a class="color1" href="#" class="dropdown-toggle" data-toggle="dropdown">Women<span class="caret"></span></a>				
@@ -665,7 +683,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="footer-middle">
 				<div class="container">
 					<div class="col-md-3 footer-middle-in">
-						<a href="index.html"><img src="images/log.png" alt=""></a>
+						<a href="index.php"><img src="images/log.png" alt=""></a>
 						<p>Suspendisse sed accumsan risus. Curabitur rhoncus, elit vel tincidunt elementum, nunc urna tristique nisi, in interdum libero magna tristique ante. adipiscing varius. Vestibulum dolor lorem.</p>
 					</div>
 					
@@ -680,7 +698,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<ul class="in in1">
 							<li><a href="#">Order History</a></li>
 							<li><a href="wishlist.html">Wish List</a></li>
-							<li><a href="login.html">Login</a></li>
+							<li><a href="login.php">Login</a></li>
 						</ul>
 						<div class="clearfix"></div>
 					</div>
@@ -719,7 +737,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 			</div>
 		</div>
-		<!--//footer-->
+
+
+
+
+
+
+
+<? if(is_admin()): ?>
+	<!--Админ панель-->
+	<section id="admBar">
+		<a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
+		<ul class="listBtns">
+			<li>
+				<a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+			</li>
+			<li>
+				<a href="adm/social_btns.php">Кнопки соц. сетей</a>
+			</li>
+		</ul>
+
+
+	</section>
+<? endif; ?>
+
+
+
+
+
+
+
+<!--//footer-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
@@ -734,6 +782,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		});
 		</script>
 
+<!--scripts-->
+<script src="js/face/admBar.js"></script>
 
 </body>
 </html>
