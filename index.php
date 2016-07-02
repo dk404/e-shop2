@@ -3,10 +3,16 @@ require_once("functions/path.php");
 require_once("functions/DB.php");
 require_once("functions/auth.php");
 
-
 /*-----------------------------------
 Делаем выборки
 -----------------------------------*/
+//Настройки страницы
+$stranica       = "home";
+$stranicaInfo   = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
+if($stranicaInfo){ $stranicaInfo["meta"] = json_decode($stranicaInfo["meta"], true); }
+
+
+
 //соц сети
 $Socials = db_select("SELECT * FROM socials ORDER BY nomer")["items"];
 
@@ -760,7 +766,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
 		<ul class="listBtns">
 			<li>
-				<a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+				<a href="adm/page_settings.php?stranica=<? echo $stranica ?>">Редактировать старницу</a>
 			</li>
 			<li>
 				<a href="adm/social_btns.php">Кнопки соц. сетей</a>
