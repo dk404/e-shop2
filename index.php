@@ -29,7 +29,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shopin A Ecommerce Category Flat Bootstrap Responsive Website Template | Home :: w3layouts</title>
+	<title><? echo $stranicaInfo["title"] ?></title>
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 	<!-- Custom Theme files -->
 	<!--theme-style-->
@@ -37,8 +37,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<!--//theme-style-->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template,
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	<meta name="keywords" content="<? echo $stranicaInfo["meta"]["keywords"] ?>" />
+	<meta name="description" content="<? echo $stranicaInfo["meta"]["desc"] ?>" />
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="css/admElements.css" rel="stylesheet">
 
