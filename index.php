@@ -25,6 +25,7 @@ if($resInfo){ $resInfo["meta"] = json_decode($resInfo["meta"], true); }
 <!-- Custom Theme files -->
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/adm_elements.css" rel="stylesheet" type="text/css" media="all" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -760,17 +761,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <li>
             <a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
         </li>
-        <li>
-            <a href="adm/categories.php">Категории</a>
-        </li>
-        <li>
-            <a href="adm/products.php">Товары</a>
-        </li>
+
     </ul>
 </section>
 <? endif; ?>
 
-<script src="js/face/admBar.min.js" type="text/javascript"></script>
+<script src="js/face/admBar.js" type="text/javascript"></script>
 
 
 </body>
