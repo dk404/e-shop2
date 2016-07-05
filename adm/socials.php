@@ -8,33 +8,37 @@ $Admin = is_admin();
 if(!$Admin){ exit("Нет прав доступа"); }
 
 $referer = ($_POST["referer"])? $_POST["referer"]: $_SERVER["HTTP_REFERER"];
-if(!$_GET["stranica"]){ header("Location: ".$referer); exit(); }else{ $stranica = proverka1($_GET["stranica"]);  }
 $thisPage = path_withoutGet();
+$socArr = ["tw" => "twitter", "fb" => "facebook", "be" => "behance", "in" => "linkedin"];
+
+
 
 /*------------------------------
 Ф-ии
 -------------------------------*/
+function combine($arr){
+    $keys = array_column($arr, "type");
+    $val  = array_column($arr, "link");
+    return array_combine($keys, $val);
+}
+
+
 function write_to_db(){
 
-    $table = "page_settings";
-    $response = [];
+    $table      = "socials";
+    $arr        = [];
+    $response   = [];
 
-    $arr = [
-        "stranica"      => proverka1($_POST["stranica"])
-        ,"title"         => proverka1($_POST["title"])
-        ,"btn_title"     => proverka1($_POST["btn_title"])
-        ,"text"          => proverka1($_POST["text"])
-        ,"meta"          => [
-            "title"             => proverka1($_POST["meta"]["title"])
-            ,"desc"             => proverka1($_POST["meta"]["desc"])
-            ,"keywords"         => proverka1($_POST["meta"]["keywords"])
-        ]
 
-    ];
+    foreach ($_POST["social"] as $item => $value) {
+        $arr[] = [
+            "type"  => $item
+            ,"link" => urlencode($value)
+        ];
+    }
 
-    $arr["meta"] = addslashes(json_encode($arr["meta"]));
-    $response  = db_duplicate_update($table, [0 => $arr]);
 
+    $response  = db_duplicate_update($table, $arr);
     return $response;
 }
 
@@ -52,8 +56,8 @@ endif;
 /*------------------------------
 Вывод записи
 -------------------------------*/
-$Items = db_row("SELECT * FROM page_settings WHERE stranica ='".$stranica."'", true)["item"];
-if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
+$Items = db_select("SELECT * FROM socials", true)["items"];
+if($Items){ $Items = combine($Items); }
 
 ?>
 <!DOCTYPE html>
@@ -77,17 +81,12 @@ if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
 <a href="#" class="formTymbler"><span>Редактировать информацию</span></a>
 
 <section class="infoForm" >
-    <form action="<? echo $thisPage."?stranica=".$stranica; ?>" method="post" enctype="multipart/form-data" name="myForm" target="_self">
+    <form action="<? echo $thisPage; ?>" method="post" enctype="multipart/form-data" name="myForm" target="_self">
         <input type="hidden" name="referer" value="<? echo $referer; ?>" />
-        <input type="hidden" name="stranica" value="<? echo $stranica; ?>" />
-
-        <input type="text" name="title" value="<? echo @$Items["title"]; ?>" placeholder="title"/><br><br>
-        <input type="text" name="btn_title" value="<? echo @$Items["btn_title"]; ?>" placeholder="btn_title"/><br><br>
-        <input type="text" name="meta[title]" value="<? echo @$Items["meta"]["title"]; ?>" placeholder="meta[title]"/><br><br>
-        <input type="text" name="meta[desc]" value="<? echo @$Items["meta"]["desc"]; ?>" placeholder="meta[desc]"/><br><br>
-        <input type="text" name="meta[keywords]" value="<? echo @$Items["meta"]["keywords"]; ?>" placeholder="meta[keywords]"/><br><br>
-        <textarea name="text" class="js-ckeditor"><? echo @$Items["text"]; ?></textarea><br><br>
-
+        <? foreach ($socArr as $item => $value) { ?>
+            <div class="forInput"><? echo $value; ?></div>
+            <input type="text" name="social[<? echo $item ?>]" value="<? echo @urldecode($Items[$item]); ?>" ><br><br>
+        <? } ?>
         <input name="submit" type="submit" value="готово"/>
     </form>
 </section>

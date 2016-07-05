@@ -75,13 +75,13 @@ h1,h2,h3,h4,h5,h6,label,p{
     background: url(../images/img-sprite.png)no-repeat -14px -14px ;
 	margin:0 0.3em;
 }
-.header-social ul li a i.ic1{
+.header-social ul li a i.fb {
     background-position:  -55px -12px ;
 }
-.header-social ul li a i.ic2{
+.header-social ul li a i.be {
     background-position: -101px -12px ;
 }
-.header-social ul li a i.ic3{	
+.header-social ul li a i.in {
    background-position:-150px -12px ;
 }
 .header-social ul li a i.ic4{	
@@ -90,13 +90,13 @@ h1,h2,h3,h4,h5,h6,label,p{
 .header-social ul li a i:hover{
     background:url(../images/img-sprite.png)no-repeat -14px -52px ;
 }
-.header-social ul li a i.ic1:hover{
+.header-social ul li a i.fb:hover{
     background-position:  -55px -50px ;
 }
-.header-social ul li a i.ic2:hover{
+.header-social ul li a i.be:hover{
     background-position: -101px -50px ;
 }
-.header-social ul li a i.ic3:hover{	
+.header-social ul li a i.in:hover{
    background-position:-150px -50px ;
 }
 .header-social ul li a i.ic4:hover{	

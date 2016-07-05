@@ -15,12 +15,20 @@ $stranica  = "home";
 $resInfo = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
 if($resInfo){ $resInfo["meta"] = json_decode($resInfo["meta"], true); }
 
+/*------------------------------
+Соц кнопки
+-------------------------------*/
+$socBtns = db_select("SELECT * FROM socials")["items"];
+
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Shopin A Ecommerce Category Flat Bootstrap Responsive Website Template | Home :: w3layouts</title>
+<title><? echo $resInfo["meta"]["title"]; ?></title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!-- Custom Theme files -->
 <!--theme-style-->
@@ -30,8 +38,8 @@ if($resInfo){ $resInfo["meta"] = json_decode($resInfo["meta"], true); }
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<meta name="keywords" content="<? echo @$resInfo["meta"]["keywords"]; ?>" />
+<meta name="description" content="<? echo @$resInfo["meta"]["desc"]; ?>" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
 <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
@@ -90,10 +98,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 			<div class="col-sm-5 header-social">		
 					<ul >
-						<li><a href="#"><i></i></a></li>
-						<li><a href="#"><i class="ic1"></i></a></li>
-						<li><a href="#"><i class="ic2"></i></a></li>
-						<li><a href="#"><i class="ic3"></i></a></li>
+                        <? if($socBtns){ foreach ($socBtns as $socBtn) {
+                            if(!$socBtn["link"]){continue;}
+                            ?>
+						    <li><a href="<? echo @urldecode($socBtn["link"]) ?>"><i class="<? echo $socBtn["type"] ?>"></i></a></li>
+                        <? }
+                        } ?>
 						<li><a href="#"><i class="ic4"></i></a></li>
 					</ul>
 					
@@ -122,7 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
-            <li><a class="color" href="index.php">Home</a></li>
+            <li><a class="color" href="index.php"><? echo $resInfo["btn_title"]; ?></a></li>
             
     		<li class="dropdown mega-dropdown active">
 			    <a class="color1" href="#" class="dropdown-toggle" data-toggle="dropdown">Women<span class="caret"></span></a>				
@@ -759,7 +769,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
     <ul class="listBtns">
         <li>
-            <a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+            <a href="adm/page_settings.php?stranica=<? echo $stranica; ?>">Редактировать старницу</a>
+        </li>
+        <li>
+            <a href="adm/socials.php">Соц. сети</a>
         </li>
 
     </ul>

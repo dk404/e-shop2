@@ -1249,16 +1249,19 @@ a.return {
     a.return:hover i {
       color: white; }
 
-a.addPage {
+a.formTymbler {
   display: block;
   text-align: center;
-  max-width: 250px;
   margin: 50px auto;
+  text-decoration: none;
   font-size: 16px;
   font-weight: bold;
-  color: #4bbaff; }
-  a.addPage:hover, a.addPage.active {
-    color: #18a6ff; }
+  color: #F67777; }
+  a.formTymbler span {
+    display: inline-block;
+    border-bottom: 1px dashed; }
+  a.formTymbler:hover, a.formTymbler.active {
+    color: #f34747; }
 
 h3 {
   color: #37363a; }
@@ -1306,11 +1309,12 @@ h3 {
 /*-----------------------------------
 ---####---
 -----------------------------------*/
-section.addForm {
-  border: 1px solid #4bbaff;
+section.infoForm {
+  border: 1px solid #F67777;
   padding: 15px;
-  box-sizing: border-box; }
-
+  box-sizing: border-box;
+  max-width: 1024px;
+  margin: 50px auto; }
 section.list {
   max-width: 1024px;
   margin: 0 auto; }
@@ -1338,10 +1342,6 @@ section.list {
         color: #4bbaff; }
         section.list ul.pageItems li > .settings a:hover {
           color: red; }
-
-section.addForm {
-  max-width: 1024px;
-  margin: 50px auto; }
 
 .forError {
   max-width: 1024px;

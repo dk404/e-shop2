@@ -1,14 +1,14 @@
 $(document).ready(function () {
 
     var clear_url = "http://"+window.location.host,
-        optHref   = clear_url + "e-shop/adm/option.php";
+        optHref   = clear_url + "e-shop2/adm/option.php";
 
 
 
   /*------------------------------
   EVENTS
   -------------------------------*/
-    $(".addPage").on("click", function () {
+    $(".formTymbler").on("click", function () {
 
         $(this).next().slideToggle("fast");
         return false;
