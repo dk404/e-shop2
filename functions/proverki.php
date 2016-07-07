@@ -26,3 +26,23 @@ function proverka2($str){
     return $str;
 }
 
+/**
+ * рекурсивная проверка массива
+ * @param $arr
+ * @param int $n - номер нужной ф-ии проверки
+ * @return array
+ */
+function proverka_recursive($arr, $n = 1){
+
+    $proverka = "proverka".$n;
+    $newArr   = [];
+    foreach ($arr as $item => $value) {
+        if(empty($value)){ continue; }
+        $newArr[] = $proverka($value);
+    }
+
+    return $newArr;
+}
+
+
+

@@ -774,6 +774,9 @@ $socBtns = db_select("SELECT * FROM socials")["items"];
         <li>
             <a href="adm/socials.php">Соц. сети</a>
         </li>
+        <li>
+            <a href="adm/text_slider.php?stranica=<? echo $stranica; ?>">Текст слайдер</a>
+        </li>
 
     </ul>
 </section>

@@ -7,11 +7,11 @@ html, body {
   background: #e1e1e1;
   font-family: Verdana, sans-serif; }
 
-#bigSlider .listItems, #bigSlider .listItems > li a, #products > .catBlock .flex, #products > .listItems > li {
+section.list ul.sliderItems > li > .row1, section.list ul.sliderItems > li > .row2.active, #bigSlider .listItems, #bigSlider .listItems > li a, #products > .catBlock .flex, #products > .listItems > li {
   display: flex;
   flex-wrap: wrap; }
 
-#bigSlider .listItems, #products > .listItems {
+section.infoForm.textSlider ul.smallTitle1, section.infoForm.textSlider ul.smallTitle2, section.list ul.sliderItems, #bigSlider .listItems, #products > .listItems {
   list-style: none;
   margin: 0;
   padding: 0; }
@@ -1315,6 +1315,28 @@ section.infoForm {
   box-sizing: border-box;
   max-width: 1024px;
   margin: 50px auto; }
+  section.infoForm.textSlider input[type='text'], section.infoForm.textSlider .st-formCont .row textarea, .st-formCont .row section.infoForm.textSlider textarea {
+    padding: 5px 10px;
+    vertical-align: middle; }
+  section.infoForm.textSlider ul.smallTitle1 li, section.infoForm.textSlider ul.smallTitle2 li {
+    margin-bottom: 5px; }
+  section.infoForm.textSlider ul.smallTitle1 li:first-of-type a.minus, section.infoForm.textSlider ul.smallTitle2 li:first-of-type a.minus {
+    display: none; }
+  section.infoForm.textSlider ul.smallTitle1 li:not(:last-of-type) a.plus, section.infoForm.textSlider ul.smallTitle2 li:not(:last-of-type) a.plus {
+    display: none; }
+  section.infoForm.textSlider .forInput {
+    font-size: 12px;
+    font-weight: bold;
+    color: #9a9a9a; }
+  section.infoForm.textSlider a.plus, section.infoForm.textSlider a.minus {
+    display: inline-block;
+    font-size: 20px;
+    text-decoration: none;
+    vertical-align: middle; }
+  section.infoForm.textSlider a.plus {
+    color: green; }
+  section.infoForm.textSlider a.minus {
+    color: #F67777; }
 section.list {
   max-width: 1024px;
   margin: 0 auto; }
@@ -1342,6 +1364,41 @@ section.list {
         color: #4bbaff; }
         section.list ul.pageItems li > .settings a:hover {
           color: red; }
+  section.list ul.sliderItems > li {
+    margin-bottom: 5px;
+    border-bottom: 1px dotted #37363a;
+    padding: 5px; }
+    section.list ul.sliderItems > li > .row1 {
+      justify-content: space-between;
+      align-items: center; }
+      section.list ul.sliderItems > li > .row1 > .col1 img {
+        width: 50px;
+        vertical-align: middle; }
+      section.list ul.sliderItems > li > .row1 > .col1 > .title {
+        text-decoration: none;
+        display: inline-block;
+        border-bottom: 1px dashed;
+        color: #37363a;
+        font-size: 14px; }
+        section.list ul.sliderItems > li > .row1 > .col1 > .title:hover, section.list ul.sliderItems > li > .row1 > .col1 > .title.active {
+          color: #f34747; }
+      section.list ul.sliderItems > li > .row1 > .col2 a {
+        font-size: 12px; }
+        section.list ul.sliderItems > li > .row1 > .col2 a.edit {
+          color: #4bbaff; }
+        section.list ul.sliderItems > li > .row1 > .col2 a.delete {
+          color: red; }
+    section.list ul.sliderItems > li > .row2.active {
+      justify-content: space-between;
+      margin-top: 15px; }
+    section.list ul.sliderItems > li > .row2 > ul {
+      width: 49%;
+      margin: 0;
+      box-sizing: border-box; }
+      section.list ul.sliderItems > li > .row2 > ul li {
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: #37363a; }
 
 .forError {
   max-width: 1024px;

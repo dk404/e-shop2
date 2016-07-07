@@ -116,6 +116,69 @@ section{
     margin: 50px auto;
 
 
+    &.textSlider{
+
+      input[type='text']{
+        padding: 5px 10px;
+        vertical-align: middle;
+      }
+      ul{
+        &%smallTitle{
+          @extend %ul;
+
+          li{
+            margin-bottom: 5px;
+          }
+          li:first-of-type{
+            a.minus{
+              display: none;
+            }
+
+          }
+          li:not(:last-of-type){
+            a.plus{
+              display: none;
+            }
+          }
+
+        }
+
+        &.smallTitle1{
+          @extend %smallTitle;
+        }
+        &.smallTitle2{
+          @extend %smallTitle;
+
+        }
+      }
+      .forInput{
+        font-size: 12px;
+        font-weight: bold;
+        color: darken(silver, 15%);
+      }
+
+      a{
+        &%plusMinus{
+          display: inline-block;
+          font-size: 20px;
+          text-decoration: none;
+          vertical-align: middle;
+        }
+
+        &.plus{
+          @extend %plusMinus;
+          color: green;
+        }
+
+        &.minus{
+          @extend %plusMinus;
+          color: $red;
+        }
+      }
+
+    }
+
+
   }
   &.list{
     max-width: 1024px;
@@ -158,6 +221,74 @@ section{
 
       }
 
+    }
+    ul.sliderItems{
+      @extend %ul;
+
+      &>li{
+        margin-bottom: 5px;
+        border-bottom: 1px dotted $darkGray;
+        padding: 5px;
+
+        &>.row1{
+          @extend %flex;
+          justify-content: space-between;
+          align-items: center;
+
+          &>.col1{
+            img{
+              width: 50px;
+              vertical-align: middle;
+            }
+            &>.title{
+              text-decoration: none;
+              display: inline-block;
+              border-bottom: 1px dashed;
+              color: $darkGray;
+              font-size: 14px;
+
+              &:hover, &.active{
+                color: darken($red, 10%);
+
+              }
+
+            }
+          }
+          &>.col2{
+            a{
+              font-size: 12px;
+
+              &.edit{
+                color: $blue;
+              }
+              &.delete{
+                color: red;
+              }
+            }
+          }
+        }
+        &>.row2{
+          &.active{
+            @extend %flex;
+            justify-content: space-between;
+            margin-top: 15px;
+          }
+
+
+          &>ul{
+            width: 49%;
+            margin: 0;
+            box-sizing: border-box;
+
+            li{
+              margin-bottom: 5px;
+              font-size: 12px;
+              color: $darkGray;
+
+            }
+          }
+        }
+      }
     }
   }
 }
