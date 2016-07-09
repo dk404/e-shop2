@@ -96,3 +96,66 @@ if($_GET["method_name"] == "deleteProduct" && is_numeric($_GET["ID"])){
 
 
 }
+
+//Удалить элемент из text_slider
+if($_GET["method_name"] == "deleteTextslider" && is_numeric($_GET["ID"])){
+
+    $response = [
+        "error" => null
+    ];
+
+    $table = "text_slider";
+
+    //узнаем есть ли такая запись
+    $resItem = db_row("SELECT * FROM ".$table." WHERE ID=".$_GET["ID"])["item"];
+    if(!$resItem){ $response["error"] = "Ошибка такого элемента не найдено";
+
+        if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+
+            header("Location: ".$_SERVER["HTTP_REFERER"]);
+        }
+        else
+        {
+            print_r(json_encode($response)); exit();
+        }
+
+    }
+
+    //удалим запись
+    $resDb = db_delete($table, "ID=".$_GET["ID"], true);
+    if($resDb["error"]){
+        $response["error"] = $resDb["error"];
+
+        if($_SERVER['HTTP_X_REQUESTED_WITH']!='XMLHttpRequest') {
+
+            header("Location: ".$_SERVER["HTTP_REFERER"]);
+        }
+        else
+        {
+            print_r(json_encode($response)); exit();
+        }
+    }
+
+    //удалим картинки
+    if($resItem["photo"])
+    {
+        $tmp["big"]     = path_clear_path()."/FILES/forTextSlider/big/".$resItem["photo"];
+        $tmp["small"]   = path_clear_path()."/FILES/forTextSlider/small/".$resItem["photo"];
+
+        if(file_exists($tmp["small"])){ unlink($tmp["small"]);  }
+        if(file_exists($tmp["big"])){ unlink($tmp["big"]);  }
+
+    }
+
+    //response
+    if($_SERVER['HTTP_X_REQUESTED_WITH']!='XMLHttpRequest') {
+
+        header("Location: ".$_SERVER["HTTP_REFERER"]);
+    }
+    else
+    {
+        print_r(json_encode($response)); exit();
+    }
+
+
+}

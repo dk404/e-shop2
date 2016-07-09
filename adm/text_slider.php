@@ -8,17 +8,32 @@ require_once("../functions/saveImg.php");
 $Admin = is_admin();
 if(!$Admin){ exit("Нет прав доступа"); }
 
-$referer = ($_POST["referer"])? $_POST["referer"]: $_SERVER["HTTP_REFERER"];
+$referer        = ($_POST["referer"])? $_POST["referer"]: $_SERVER["HTTP_REFERER"];
 if(!$_GET["stranica"]){ header("Location: ".$referer); exit(); }else{ $stranica = proverka1($_GET["stranica"]);  }
-$ID = (is_numeric($_GET["ID"]))? $_GET["ID"] : false;
-$thisPage = path_withoutGet();
+
+if(is_numeric($_GET["ID"]) || is_numeric($_POST["ID"]))
+{
+
+    if($_POST["ID"]){ $ID   = $_POST["ID"]; }
+    if($_GET["ID"]) { $ID   = $_GET["ID"]; }
+
+}
+else{
+    $ID = false;
+}
+
+
+$thisPage       = path_withoutGet();
+$table          = "text_slider";
+
 
 /*------------------------------
 Ф-ии
 -------------------------------*/
-function write_to_db($method){
+function write_to_db($method, $resItem = null){
 
-    $table = "text_slider";
+    global $table;
+
     $response = [];
 
     $arr = [
@@ -50,11 +65,65 @@ function write_to_db($method){
                 "big_title"     => proverka1($_POST["big_title"])
                 ,"stranica"     => $_POST["stranica"]
                 ,"photo"        => $resAdd["filename"]
-                ,"small_title1" => json_encode(proverka_recursive($_POST["small_title1"], 1))
-                ,"small_title2" => json_encode(proverka_recursive($_POST["small_title2"], 1))
+                ,"small_title1" => addslashes(json_encode(proverka_recursive($_POST["small_title1"], 1)))
+                ,"small_title2" => addslashes(json_encode(proverka_recursive($_POST["small_title2"], 1)))
             ];
 
             $redDb = db_insert($table, $arr);
+            if($redDb["error"])
+            {
+                $response["error"][] = "ошибка: ".$redDb["error"]." строка: ".__LINE__; return $response;
+            }
+            else{
+                $response["response"] = $redDb;
+            }
+
+            break;
+        case "edit":
+
+            global $ID;
+
+            if(!$_POST["big_title"])
+            {
+                $response["error"][] = "ошибка: Не заполненны все данные. строка: ".__LINE__; return $response;
+            }
+
+
+            $resItem = db_row("SELECT ID, photo FROM ".$table." WHERE ID=".$ID)["item"];
+            if($resItem){
+                if($resItem["small_title1"]){$resItem["small_title1"] = json_decode($resItem["small_title1"], true);}
+                if($resItem["small_title2"]){$resItem["small_title2"] = json_decode($resItem["small_title2"], true);}
+            }
+
+
+
+            if($_FILES["photo"]["tmp_name"]){
+                $resAdd = photo_add_once($arr);
+                if(!$resAdd["filename"])
+                {
+                    $response["error"][] = "ошибка: при загрузке файла. строка: ".__LINE__; return $response;
+                }
+                else{
+                    $path = "../FILES/forTextSlider/";
+                    if(file_exists($path."small/".$resItem["photo"])){ unlink($path."small/".$resItem["photo"]); }
+                    if(file_exists($path."big/".$resItem["photo"])){ unlink($path."big/".$resItem["photo"]); }
+
+                    $resItem["photo"] = $resAdd["filename"];
+                }
+
+
+            }
+
+
+            $arr = [
+                "big_title"     => proverka1($_POST["big_title"])
+                ,"stranica"     => $_POST["stranica"]
+                ,"photo"        => $resItem["photo"]
+                ,"small_title1" => addslashes(json_encode(proverka_recursive($_POST["small_title1"], 1)))
+                ,"small_title2" => addslashes(json_encode(proverka_recursive($_POST["small_title2"], 1)))
+            ];
+
+            $redDb = db_update($table, $arr, "ID = ".$ID);
             if($redDb["error"])
             {
                 $response["error"][] = "ошибка: ".$redDb["error"]." строка: ".__LINE__; return $response;
@@ -72,6 +141,18 @@ function write_to_db($method){
 }
 
 
+/*------------------------------
+если был передан get ID
+-------------------------------*/
+if(is_numeric($_GET["ID"])):
+    $resItem = db_row("SELECT * FROM ".$table." WHERE ID=".$ID)["item"];
+    if($resItem){
+        if($resItem["small_title1"]){$resItem["small_title1"] = json_decode($resItem["small_title1"], true);}
+        if($resItem["small_title2"]){$resItem["small_title2"] = json_decode($resItem["small_title2"], true);}
+    }
+endif;
+
+
 
 /*------------------------------
 Если была передана форма
@@ -80,7 +161,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"):
     $resWrite = write_to_db($_POST["method"]);
     if($resWrite["error"]){$errors[] = $resWrite["error"]; }
 endif;
-
 
 
 /*------------------------------
@@ -108,12 +188,12 @@ $Items = db_select("SELECT * FROM text_slider WHERE stranica ='".$stranica."'", 
 
 <a href="<? echo $referer; ?>" class="return" title="Вернуться"><i class="material-icons">&#xE31B;</i></a>
 
-<? if ($ID) {
+<? if ($resItem) {
     $method = "edit";
-    $tmp = ["active", null];
+    $tmp = ["active", null, null];
 }else{
     $method = "add";
-    $tmp = [null, "hidden"];
+    $tmp = [null, "hidden" ,"required"];
 } ?>
 <a href="#" class="formTymbler <? echo $tmp[0] ?>"><span>Редактировать информацию</span></a>
 
@@ -126,42 +206,53 @@ $Items = db_select("SELECT * FROM text_slider WHERE stranica ='".$stranica."'", 
 
 
     <form action="<? echo $thisPage."?stranica=".$stranica; ?>" method="post" enctype="multipart/form-data" name="myForm" target="_self">
+
         <input type="hidden" name="referer" value="<? echo $referer; ?>" />
         <input type="hidden" name="stranica" value="<? echo $stranica; ?>" />
         <input type="hidden" name="method" value="<? echo $method ?>" />
-        <input type="hidden" name="ID" value="" />
+        <input type="hidden" name="ID" value="<? echo @$ID; ?>" />
 
-        <img src="" align="right">
 
-        <input type="file" name="photo" ><br><br>
-        <input type="text" name="big_title" value="<? echo @$Items["big_title"]; ?>" placeholder="title"/><br><br>
+        <? if($resItem["photo"]){ ?>
+            <img src="<? echo "../FILES/forTextSlider/small/".$resItem["photo"]; ?>" align="right">
+        <? } ?>
+
+        <input type="file" name="photo" <? echo $tmp[2]; ?>><br><br>
+
+
+        <input type="text" name="big_title" value="<? echo @$resItem["big_title"] ?>" placeholder="title"/><br><br>
+
 
         <div class="forInput">smallTitle1</div>
         <ul class="smallTitle1">
+            <? if($resItem["small_title1"]){
+            foreach ($resItem["small_title1"] as $item) {  ?>
+            <li><input type="text" name="small_title1[]" value="<? echo $item ?>" >
+                <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
+                <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
+            </li>
+            <? }}else{  ?>
             <li><input type="text" name="small_title1[]" >
                 <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
                 <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
             </li>
-            <li><input type="text" name="small_title1[]" >
-                <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
-                <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
-            </li>
+            <? } ?>
         </ul>
 
         <div class="forInput">smallTitle2</div>
         <ul class="smallTitle2">
-            <li><input type="text" name="small_title2[]" >
-                <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
-                <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
-            </li>
-            <li><input type="text" name="small_title2[]" >
-                <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
-                <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
-            </li>
-            <li><input type="text" name="small_title2[]" >
-                <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
-                <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
-            </li>
+            <? if($resItem["small_title2"]){
+                foreach ($resItem["small_title2"] as $item) {  ?>
+                    <li><input type="text" name="small_title2[]" value="<? echo $item ?>" >
+                        <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
+                        <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
+                    </li>
+                <? }}else{  ?>
+                <li><input type="text" name="small_title2[]" >
+                    <a href="#" class="plus"><i class="material-icons">&#xE148;</i></a>
+                    <a href="#" class="minus"><i class="material-icons">&#xE15D;</i></a>
+                </li>
+            <? } ?>
         </ul>
 
         <input name="submit" type="submit" value="готово"/>
@@ -180,15 +271,15 @@ $Items = db_select("SELECT * FROM text_slider WHERE stranica ='".$stranica."'", 
             <div class="row1">
                 <div class="col1">
                     <img width="50" src="<? echo "../FILES/forTextSlider/small/".$item["photo"] ?>" >
-                    <a class="title" href="#"><? echo $item["big_title"] ?></a>
+                    <a class="title js-tymbler" href="#"><? echo $item["big_title"] ?></a>
                 </div>
                 <div class="col2">
-                    <a href="#" class="edit">edit</a>
-                    <a href="#" class="delete">delete</a>
+                    <a href="<? echo $thisPage."?stranica=".$stranica."&ID=".$item["ID"]; ?>" class="edit">edit</a>
+                    <a href="options.php?method_name=deleteTextslider&ID=<? echo $item["ID"] ?>" class="delete">delete</a>
                 </div>
             </div>
             <!--инфо про smalltitles-->
-            <div class="row2 active" >
+            <div class="row2" hidden>
 
                 <? if($item["small_title1"]){?>
                 <ul class="col1">
@@ -222,6 +313,7 @@ $Items = db_select("SELECT * FROM text_slider WHERE stranica ='".$stranica."'", 
 <script type="text/javascript" src="../ckeditor/adapters/jquery.min.js"></script>
 <script type="text/javascript" src="../js/adm/forEditor.js"></script>
 <script type="text/javascript" src="../js/adm/page_settings.js"></script>
+<script type="text/javascript" src="../js/adm/text_slider.js"></script>
 </body>
 </html>
 
