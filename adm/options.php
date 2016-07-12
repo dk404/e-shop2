@@ -6,6 +6,60 @@ require_once("../functions/path.php");
 if(!is_admin()){exit("пока пока");}
 
 
+/*------------------------------
+Ф-ии
+-------------------------------*/
+
+/**
+ * @param $array - [table, photodir(название папки где храняться фото), photoTd(название колонки в бд, для photo)]
+ * @return array - [error, $resDb]
+ */
+function delItems($array){
+
+    $table      = $array["table"];
+    $photodir   = ($array["photodir"])  ? $array["photodir"] : null;
+    $photoTd    = ($array["photoTd"])   ? $array["photoTd"] : null;
+
+    $response = [
+        "error" => null
+    ];
+
+    //узнаем есть ли такая запись
+    $resItem = db_row("SELECT * FROM ".$table." WHERE ID=".$_GET["ID"])["item"];
+    if(!$resItem){ $response["error"] = "Ошибка такого элемента не найдено";
+        return $response;
+    }
+
+    //удалим запись
+    $resDb = db_delete($table, "ID=".$_GET["ID"], true);
+    if($resDb["error"]){
+        $response["error"] = $resDb["error"];
+        return $response;
+    }
+
+    //удалим картинки
+    if($photodir && $resItem[$photoTd])
+    {
+        $tmp["big"]     = path_clear_path()."/FILES/".$photodir."/big/".$resItem[$photoTd];
+        $tmp["small"]   = path_clear_path()."/FILES/".$photodir."/small/".$resItem[$photoTd];
+
+        if(file_exists($tmp["small"])){ unlink($tmp["small"]);  }
+        if(file_exists($tmp["big"])){ unlink($tmp["big"]);  }
+
+    }
+
+    //response
+    return $response;
+}
+
+
+
+
+/*------------------------------
+Запросы
+-------------------------------*/
+
+
 //Удалить элемент из слайдера
 if($_GET["method_name"] == "deleteBigSlider" && is_numeric($_GET["ID"])){
     $resDb = db_delete("bigSlider", "ID=".$_GET["ID"]);
@@ -149,6 +203,32 @@ if($_GET["method_name"] == "deleteTextslider" && is_numeric($_GET["ID"])){
 
     //response
     if($_SERVER['HTTP_X_REQUESTED_WITH']!='XMLHttpRequest') {
+
+        header("Location: ".$_SERVER["HTTP_REFERER"]);
+    }
+    else
+    {
+        print_r(json_encode($response)); exit();
+    }
+
+
+}
+
+
+//Универсальный метод удаления
+//Удалить элемент из text_slider
+if($_GET["method_name"] == "deleteItem" && is_numeric($_GET["ID"])){
+
+
+    $arr = [
+        "table"         => $_GET["table"]
+        ,"photodir"     => $_GET["photodir"]
+        ,"photoTd"      => $_GET["photoTd"]
+    ];
+
+    $response = delItems($arr);
+
+    if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
 
         header("Location: ".$_SERVER["HTTP_REFERER"]);
     }

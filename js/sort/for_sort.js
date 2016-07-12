@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 var clear_url = window.location.protocol + "//" + window.location.hostname + "/",
-    opthref   = clear_url + "e-shop/adm/options.php";
+    opthref   = clear_url + "e-shop2/adm/options.php";
 
 //-----
     function ui_sort($obj){
