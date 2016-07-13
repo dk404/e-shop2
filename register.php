@@ -25,23 +25,20 @@ if(isset($_POST["submit"])):
 			if($resDb["items"]){
 				exit("Такой пользователь уже существует");
 			}
-			else{
+//			else{
 
-				//Добавим картинку
-				if($_FILES["avatar"]["tmp_name"]){
-					$resPhoto = photo_add_once(["maw" => 800, "miw" => 160, "path" => "FILES/avatars", "inputName" => "avatar"]);
-					if($resPhoto["error"]){exit($resPhoto["error"]);}
-				}
-
-
-
-
+//				//Добавим картинку
+//				if($_FILES["avatar"]["tmp_name"]){
+//					$resPhoto = photo_add_once(["maw" => 800, "miw" => 160, "path" => "FILES/avatars", "inputName" => "avatar"]);
+//					if($resPhoto["error"]){exit($resPhoto["error"]);}
+//				}
+			//Подготовим массив для insert
 				$tmp  = [
-						"email"     => $email
+					"email"     => $email
 					,"pass"     => md5($pass)
 					,"nickname" => $nick
 					,"date"     => time()
-					,"avatar"   => @$resPhoto["filename"]
+					//,"avatar"   => @$resPhoto["filename"]
 				];
 
 				$resDb = db_insert("users", $tmp, true);
@@ -55,19 +52,10 @@ if(isset($_POST["submit"])):
                         <script>
                             window.location = 'index.php';
                         </script>";
-
-
 				$goto = true;
-
-
-
-
 			}
-
-
-
-
 			break;
+
 		case $_POST["method_name"] == "auth" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && $_POST["pass"]:
 			$email  = strtolower(filter_var($_POST["email"]));
 			$pass   = proverka1($_POST["pass"]);

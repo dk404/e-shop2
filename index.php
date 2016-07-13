@@ -1,4 +1,11 @@
-<!--A Design by W3layouts 
+<?php
+require_once("functions/path.php");
+require_once("functions/DB.php");
+require_once("functions/auth.php");
+
+
+
+?><!--A Design by W3layouts
 Author: W3layout
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -62,10 +69,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="header-top">
 		<div class="container">
 			<div class="col-sm-5 col-md-offset-2  header-login">
-				<ul >
+				<ul ><?php if(is_auth()):?>
+						<li><a href="?logout=1">Logout</a></li>
+						<li><a href="checkout.html">Checkout</a></li>
+					<?php else:?>
 					<li><a href="login.php">Login</a></li>
 					<li><a href="register.php">Register</a></li>
-					<li><a href="checkout.html">Checkout</a></li>
+					<?php endif;?>
 				</ul>
 			</div>
 

@@ -1,4 +1,37 @@
-<!--A Design by W3layouts 
+<?php
+require_once("functions/path.php");
+require_once("functions/DB.php");
+require_once("functions/proverki.php");
+require_once("functions/saveImg.php");
+require_once("functions/auth.php");
+
+//Адресс этой страницы
+$this_page = path_withoutGet();
+//Разлогиниваем и редиректим
+if($_GET["logout"] == 1){
+	setcookie('ID', null, strtotime('-1 day'));
+	setcookie("token", null, strtotime('-1 day'));
+	echo "<script>window.location = 'index.php'</script>";
+}
+
+//Если передана форма
+if($_POST["method_name"] === "auth"){
+	switch($_POST["method_name"]){
+		case $_POST["method_name"] === "auth" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && proverka1($_POST["pass"]):
+			$email = strtolower($_POST["email"]);
+			$pass = md5(proverka1($_POST["pass"]));
+			$result = db_select("SELECT * FROM users WHERE email=$email AND pass=$pass")["items"][0];
+			if($result){
+				setcookie("ID", $result["items"]['ID'], strtotime("+1 day"), "/");
+				setcookie("ID", $result["items"]['pass'], strtotime("+1 day"), "/");
+				echo "<script>window.location = 'index.php'</script>";
+			}
+	}
+}
+
+?>
+
+<!--A Design by W3layouts
 Author: W3layout
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -310,14 +343,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="container">
 		<div class="login">
 		
-			<form>
+			<form action="<?php echo $this_page?>" method="post" enctype="multipart/form-data">
 			<div class="col-md-6 login-do">
+				<input type="hidden" name="method_name" value="auth">
 				<div class="login-mail">
-					<input type="text" placeholder="Email" required="">
+					<input type="text" placeholder="Email" required="" name="email">
 					<i  class="glyphicon glyphicon-envelope"></i>
 				</div>
 				<div class="login-mail">
-					<input type="password" placeholder="Password" required="">
+					<input type="password" placeholder="Password" required="" name="pass">
 					<i class="glyphicon glyphicon-lock"></i>
 				</div>
 				   <a class="news-letter " href="#">
