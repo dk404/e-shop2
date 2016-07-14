@@ -28,9 +28,15 @@ $stranica = "home";
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
-<link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
+<link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />
 <!--//theme-style-->
-<script src="js/jquery.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/adm_elem.css" rel="stylesheet">
+
+
+
+    <script src="js/jquery.min.js"></script>
 <!--- start-rate---->
 <script src="js/jstarbox.js"></script>
 	<link rel="stylesheet" href="css/jstarbox.css" type="text/css" media="screen" charset="utf-8" />
@@ -782,6 +788,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			$('a.picture').Chocolat();
 		});
 		</script>
+
+<script src="js/face/admBar.js" type="text/javascript"></script>
+
 
 
 </body>
