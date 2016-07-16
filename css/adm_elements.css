@@ -1,12 +1,4 @@
 @charset "UTF-8";
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-height: 100%;
-  background: #e1e1e1;
-  font-family: Verdana, sans-serif; }
-
 /*-----------------------------------
 Доп Классы
 -----------------------------------*/
@@ -1218,14 +1210,6 @@ html, body {
 
 .ml495 {
   margin-left: 495px; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-height: 100%;
-  background: #e1e1e1;
-  font-family: Verdana, sans-serif; }
 
 /*-----------------------------------
 Доп Классы
@@ -2446,7 +2430,8 @@ html, body {
   z-index: 99;
   width: 250px;
   height: 100%;
-  background: #37363a; }
+  background: #37363a;
+  font-family: Verdana, Geneva, sans-serif; }
   #admBar > a.tymbler {
     display: block;
     position: absolute;

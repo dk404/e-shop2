@@ -1,8 +1,8 @@
 <?php
-require_once("../functions/DB.php");
-require_once("../functions/auth.php");
-require_once("../functions/path.php");
-require_once("../functions/proverki.php");
+require_once("../../functions/DB.php");
+require_once("../../functions/auth.php");
+require_once("../../functions/path.php");
+require_once("../../functions/proverki.php");
 
 $Admin = is_admin();
 if(!$Admin){ exit("Нет прав доступа"); }
@@ -21,18 +21,17 @@ function write_to_db(){
 
     $arr = [
         "stranica"      => proverka1($_POST["stranica"])
-        ,"title"         => proverka1($_POST["title"])
-        ,"btn_title"     => proverka1($_POST["btn_title"])
-        ,"text"          => proverka2($_POST["text"])
-        ,"meta"          => [
-            "title"             => proverka1($_POST["meta"]["title"])
-            ,"desc"             => proverka1($_POST["meta"]["desc"])
-            ,"keywords"         => proverka1($_POST["meta"]["keywords"])
+        ,"dopRows"          => [
+            "address"        => proverka1($_POST["dopRows"]["address"])
+            ,"phone"         => proverka1($_POST["dopRows"]["phone"])
+            ,"email"         => proverka1($_POST["dopRows"]["email"])
+            ,"hours"         => proverka1($_POST["dopRows"]["hours"])
+            ,"maps"          => proverka2($_POST["dopRows"]["maps"])
         ]
 
     ];
 
-    $arr["meta"] = addslashes(json_encode($arr["meta"]));
+    $arr["dopRows"] = addslashes(json_encode($arr["dopRows"]));
     $response  = db_duplicate_update($table, [0 => $arr]);
 
     return $response;
@@ -53,7 +52,7 @@ endif;
 Вывод записи
 -------------------------------*/
 $Items = db_row("SELECT * FROM page_settings WHERE stranica ='".$stranica."'", true)["item"];
-if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
+if($Items["dopRows"]){$Items["dopRows"] = json_decode($Items["dopRows"], true);}
 
 ?>
 <!DOCTYPE html>
@@ -63,7 +62,7 @@ if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
     <title></title>
     <link rel="shortcut icon" href=""/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="all" href="../css/adm/page_settings.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/adm/page_settings.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 
@@ -81,12 +80,11 @@ if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
         <input type="hidden" name="referer" value="<? echo $referer; ?>" />
         <input type="hidden" name="stranica" value="<? echo $stranica; ?>" />
 
-        <input type="text" name="title" value="<? echo @$Items["title"]; ?>" placeholder="title"/><br><br>
-        <input type="text" name="btn_title" value="<? echo @$Items["btn_title"]; ?>" placeholder="btn_title"/><br><br>
-        <input type="text" name="meta[title]" value="<? echo @$Items["meta"]["title"]; ?>" placeholder="meta[title]"/><br><br>
-        <input type="text" name="meta[desc]" value="<? echo @$Items["meta"]["desc"]; ?>" placeholder="meta[desc]"/><br><br>
-        <input type="text" name="meta[keywords]" value="<? echo @$Items["meta"]["keywords"]; ?>" placeholder="meta[keywords]"/><br><br>
-        <textarea name="text" class="js-ckeditor"><? echo @$Items["text"]; ?></textarea><br><br>
+        <input type="text" name="dopRows[address]"   value="<? echo @$Items["dopRows"]["address"]; ?>"    placeholder="dopRows[address]"/><br><br>
+        <input type="text" name="dopRows[phone]"     value="<? echo @$Items["dopRows"]["phone"]; ?>"      placeholder="dopRows[phone]"/><br><br>
+        <input type="text" name="dopRows[email]"     value="<? echo @$Items["dopRows"]["email"]; ?>"      placeholder="dopRows[email]"/><br><br>
+        <input type="text" name="dopRows[hours]"     value="<? echo @$Items["dopRows"]["hours"]; ?>"      placeholder="dopRows[hours]"/><br><br>
+        <textarea name="dopRows[maps]"><? echo @stripslashes($Items["dopRows"]["maps"]); ?></textarea><br><br>
 
         <input name="submit" type="submit" value="готово"/>
     </form>
@@ -95,11 +93,11 @@ if($Items["meta"]){$Items["meta"] = json_decode($Items["meta"], true);}
 
 
 
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="../ckeditor/adapters/jquery.min.js"></script>
-<script type="text/javascript" src="../js/adm/forEditor.js"></script>
-<script type="text/javascript" src="../js/adm/page_settings.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../ckeditor/adapters/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/adm/forEditor.js"></script>
+<script type="text/javascript" src="../../js/adm/page_settings.js"></script>
 </body>
 </html>
 

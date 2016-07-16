@@ -1,22 +1,40 @@
-<!--A Design by W3layouts 
-Author: W3layout
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
+<?
+require_once("functions/DB.php");
+require_once("functions/proverki.php");
+require_once("functions/auth.php");
+require_once("functions/path.php");
+/********************************
+Общие настройки
+ ********************************/
+$thisPage = path_withoutGet();
+$stranica  = "product";
+
+/*------------------------------
+Достенем инфо про эту страницу
+-------------------------------*/
+$resInfo = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
+if($resInfo){ $resInfo["meta"] = json_decode($resInfo["meta"], true); }
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>Shopin A Ecommerce Category Flat Bootstrap Responsive Website Template | Products :: w3layouts</title>
+<title><? echo $resInfo["meta"]["title"]; ?></title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!-- Custom Theme files -->
 <!--theme-style-->
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/adm_elements.css" rel="stylesheet" type="text/css" media="all" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<meta name="keywords" content="<? echo @$resInfo["meta"]["keywords"]; ?>" />
+<meta name="description" content="<? echo @$resInfo["meta"]["desc"]; ?>" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
 <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
@@ -113,10 +131,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu1</h4>
 									<ul>
-										<li><a href="product.html">Accessories</a></li>
-										<li><a href="product.html">Bags</a></li>
-										<li><a href="product.html">Caps & Hats</a></li>
-										<li><a href="product.html">Hoodies & Sweatshirts</a></li>
+										<li><a href="product.php">Accessories</a></li>
+										<li><a href="product.php">Bags</a></li>
+										<li><a href="product.php">Caps & Hats</a></li>
+										<li><a href="product.php">Hoodies & Sweatshirts</a></li>
 										
 									</ul>	
 							</div>							
@@ -125,12 +143,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu2</h4>
 								<ul>
-										<li><a href="product.html">Jackets & Coats</a></li>
-										<li><a href="product.html">Jeans</a></li>
-										<li><a href="product.html">Jewellery</a></li>
-										<li><a href="product.html">Jumpers & Cardigans</a></li>
-										<li><a href="product.html">Leather Jackets</a></li>
-										<li><a href="product.html">Long Sleeve T-Shirts</a></li>
+										<li><a href="product.php">Jackets & Coats</a></li>
+										<li><a href="product.php">Jeans</a></li>
+										<li><a href="product.php">Jewellery</a></li>
+										<li><a href="product.php">Jumpers & Cardigans</a></li>
+										<li><a href="product.php">Leather Jackets</a></li>
+										<li><a href="product.php">Long Sleeve T-Shirts</a></li>
 									</ul>	
 							</div>							
 						</div>
@@ -138,12 +156,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu3</h4>
 									<ul>
-										<li><a href="product.html">Shirts</a></li>
-										<li><a href="product.html">Shoes, Boots & Trainers</a></li>
-										<li><a href="product.html">Sunglasses</a></li>
-										<li><a href="product.html">Sweatpants</a></li>
-										<li><a href="product.html">Swimwear</a></li>
-										<li><a href="product.html">Trousers & Chinos</a></li>
+										<li><a href="product.php">Shirts</a></li>
+										<li><a href="product.php">Shoes, Boots & Trainers</a></li>
+										<li><a href="product.php">Sunglasses</a></li>
+										<li><a href="product.php">Sweatpants</a></li>
+										<li><a href="product.php">Swimwear</a></li>
+										<li><a href="product.php">Trousers & Chinos</a></li>
 										
 									</ul>	
 								
@@ -153,12 +171,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu4</h4>
 								<ul>
-									<li><a href="product.html">T-Shirts</a></li>
-									<li><a href="product.html">Underwear & Socks</a></li>
-									<li><a href="product.html">Vests</a></li>
-									<li><a href="product.html">Jackets & Coats</a></li>
-									<li><a href="product.html">Jeans</a></li>
-									<li><a href="product.html">Jewellery</a></li>
+									<li><a href="product.php">T-Shirts</a></li>
+									<li><a href="product.php">Underwear & Socks</a></li>
+									<li><a href="product.php">Vests</a></li>
+									<li><a href="product.php">Jackets & Coats</a></li>
+									<li><a href="product.php">Jeans</a></li>
+									<li><a href="product.php">Jewellery</a></li>
 								</ul>	
 							</div>							
 						</div>
@@ -177,10 +195,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu1</h4>
 									<ul>
-										<li><a href="product.html">Accessories</a></li>
-										<li><a href="product.html">Bags</a></li>
-										<li><a href="product.html">Caps & Hats</a></li>
-										<li><a href="product.html">Hoodies & Sweatshirts</a></li>
+										<li><a href="product.php">Accessories</a></li>
+										<li><a href="product.php">Bags</a></li>
+										<li><a href="product.php">Caps & Hats</a></li>
+										<li><a href="product.php">Hoodies & Sweatshirts</a></li>
 										
 									</ul>	
 							</div>							
@@ -189,12 +207,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu2</h4>
 								<ul>
-										<li><a href="product.html">Jackets & Coats</a></li>
-										<li><a href="product.html">Jeans</a></li>
-										<li><a href="product.html">Jewellery</a></li>
-										<li><a href="product.html">Jumpers & Cardigans</a></li>
-										<li><a href="product.html">Leather Jackets</a></li>
-										<li><a href="product.html">Long Sleeve T-Shirts</a></li>
+										<li><a href="product.php">Jackets & Coats</a></li>
+										<li><a href="product.php">Jeans</a></li>
+										<li><a href="product.php">Jewellery</a></li>
+										<li><a href="product.php">Jumpers & Cardigans</a></li>
+										<li><a href="product.php">Leather Jackets</a></li>
+										<li><a href="product.php">Long Sleeve T-Shirts</a></li>
 									</ul>	
 							</div>							
 						</div>
@@ -203,12 +221,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<h4>Submenu3</h4>
 								
 <ul>
-										<li><a href="product.html">Shirts</a></li>
-										<li><a href="product.html">Shoes, Boots & Trainers</a></li>
-										<li><a href="product.html">Sunglasses</a></li>
-										<li><a href="product.html">Sweatpants</a></li>
-										<li><a href="product.html">Swimwear</a></li>
-										<li><a href="product.html">Trousers & Chinos</a></li>
+										<li><a href="product.php">Shirts</a></li>
+										<li><a href="product.php">Shoes, Boots & Trainers</a></li>
+										<li><a href="product.php">Sunglasses</a></li>
+										<li><a href="product.php">Sweatpants</a></li>
+										<li><a href="product.php">Swimwear</a></li>
+										<li><a href="product.php">Trousers & Chinos</a></li>
 										
 									</ul>	
 								
@@ -218,12 +236,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="h_nav">
 								<h4>Submenu4</h4>
 								<ul>
-									<li><a href="product.html">T-Shirts</a></li>
-									<li><a href="product.html">Underwear & Socks</a></li>
-									<li><a href="product.html">Vests</a></li>
-									<li><a href="product.html">Jackets & Coats</a></li>
-									<li><a href="product.html">Jeans</a></li>
-									<li><a href="product.html">Jewellery</a></li>
+									<li><a href="product.php">T-Shirts</a></li>
+									<li><a href="product.php">Underwear & Socks</a></li>
+									<li><a href="product.php">Vests</a></li>
+									<li><a href="product.php">Jackets & Coats</a></li>
+									<li><a href="product.php">Jeans</a></li>
+									<li><a href="product.php">Jewellery</a></li>
 								</ul>	
 							</div>							
 						</div>
@@ -234,10 +252,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</div>                  
 				</div>				
 			</li>
-			<li><a class="color3" href="product.html">Sale</a></li>
+			<li><a class="color3" href="product.php">Sale</a></li>
 			<li><a class="color4" href="404.html">About</a></li>
             <li><a class="color5" href="typo.html">Short Codes</a></li>
-            <li ><a class="color6" href="contact.html">Contact</a></li>
+            <li ><a class="color6" href="contact.php">Contact</a></li>
         </ul>
      </div><!-- /.navbar-collapse -->
 
@@ -611,38 +629,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							 <ul class="menu-drop">
 							<li class="item1"><a href="#">Men </a>
 								<ul class="cute">
-									<li class="subitem1"><a href="product.html">Cute Kittens </a></li>
-									<li class="subitem2"><a href="product.html">Strange Stuff </a></li>
-									<li class="subitem3"><a href="product.html">Automatic Fails </a></li>
+									<li class="subitem1"><a href="product.php">Cute Kittens </a></li>
+									<li class="subitem2"><a href="product.php">Strange Stuff </a></li>
+									<li class="subitem3"><a href="product.php">Automatic Fails </a></li>
 								</ul>
 							</li>
 							<li class="item2"><a href="#">Women </a>
 								<ul class="cute">
-									<li class="subitem1"><a href="product.html">Cute Kittens </a></li>
-									<li class="subitem2"><a href="product.html">Strange Stuff </a></li>
-									<li class="subitem3"><a href="product.html">Automatic Fails </a></li>
+									<li class="subitem1"><a href="product.php">Cute Kittens </a></li>
+									<li class="subitem2"><a href="product.php">Strange Stuff </a></li>
+									<li class="subitem3"><a href="product.php">Automatic Fails </a></li>
 								</ul>
 							</li>
 							<li class="item3"><a href="#">Kids</a>
 								<ul class="cute">
-									<li class="subitem1"><a href="product.html">Cute Kittens </a></li>
-									<li class="subitem2"><a href="product.html">Strange Stuff </a></li>
-									<li class="subitem3"><a href="product.html">Automatic Fails</a></li>
+									<li class="subitem1"><a href="product.php">Cute Kittens </a></li>
+									<li class="subitem2"><a href="product.php">Strange Stuff </a></li>
+									<li class="subitem3"><a href="product.php">Automatic Fails</a></li>
 								</ul>
 							</li>
 							<li class="item4"><a href="#">Accessories</a>
 								<ul class="cute">
-									<li class="subitem1"><a href="product.html">Cute Kittens </a></li>
-									<li class="subitem2"><a href="product.html">Strange Stuff </a></li>
-									<li class="subitem3"><a href="product.html">Automatic Fails</a></li>
+									<li class="subitem1"><a href="product.php">Cute Kittens </a></li>
+									<li class="subitem2"><a href="product.php">Strange Stuff </a></li>
+									<li class="subitem3"><a href="product.php">Automatic Fails</a></li>
 								</ul>
 							</li>
 									
 							<li class="item4"><a href="#">Shoes</a>
 								<ul class="cute">
-									<li class="subitem1"><a href="product.html">Cute Kittens </a></li>
-									<li class="subitem2"><a href="product.html">Strange Stuff </a></li>
-									<li class="subitem3"><a href="product.html">Automatic Fails </a></li>
+									<li class="subitem1"><a href="product.php">Cute Kittens </a></li>
+									<li class="subitem2"><a href="product.php">Strange Stuff </a></li>
+									<li class="subitem3"><a href="product.php">Automatic Fails </a></li>
 								</ul>
 							</li>
 						</ul>
@@ -760,9 +778,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<h6>Information</h6>
 						<ul class=" in">
 							<li><a href="404.html">About</a></li>
-							<li><a href="contact.html">Contact Us</a></li>
+							<li><a href="contact.php">Contact Us</a></li>
 							<li><a href="#">Returns</a></li>
-							<li><a href="contact.html">Site Map</a></li>
+							<li><a href="contact.php">Site Map</a></li>
 						</ul>
 						<ul class="in in1">
 							<li><a href="#">Order History</a></li>
@@ -807,6 +825,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 		<!--//footer-->
+
+<? if(is_admin()): ?>
+    <!--Админ панель-->
+    <section id="admBar">
+        <a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
+        <ul class="listBtns">
+            <li>
+                <a href="adm/page_settings.php?stranica=<? echo $stranica; ?>">Редактировать старницу</a>
+            </li>
+            <li>
+                <a href="adm/socials.php">Соц. сети</a>
+            </li>
+            <li>
+                <a href="adm/partners.php">Партнеры</a>
+            </li>
+
+        </ul>
+    </section>
+<? endif; ?>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
 	<script src="js/simpleCart.min.js"> </script>
@@ -821,5 +858,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			$('a.picture').Chocolat();
 		});
 		</script>
+<script src="js/face/admBar.js" type="text/javascript"></script>
 </body>
 </html>

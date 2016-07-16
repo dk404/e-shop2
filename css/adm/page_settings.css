@@ -1,12 +1,4 @@
 @charset "UTF-8";
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-height: 100%;
-  background: #e1e1e1;
-  font-family: Verdana, sans-serif; }
-
 section.list ul.sliderItems > li > .row1, section.list ul.sliderItems > li > .row2.active, #bigSlider .listItems, #bigSlider .listItems > li a, #products > .catBlock .flex, #products > .listItems > li {
   display: flex;
   flex-wrap: wrap; }
@@ -1236,6 +1228,14 @@ section.infoForm.textSlider ul.smallTitle1, section.infoForm.textSlider ul.small
 /*-----------------------------------
 Общие настройки
 -----------------------------------*/
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  background: #e1e1e1;
+  font-family: Verdana, sans-serif; }
+
 a.return {
   display: block;
   transition: all 0.3s ease; }
