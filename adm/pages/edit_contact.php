@@ -1,8 +1,8 @@
 <?php
-require_once("../functions/DB.php");
-require_once("../functions/auth.php");
-require_once("../functions/proverki.php");
-require_once("../functions/path.php");
+require_once("../../functions/DB.php");
+require_once("../../functions/auth.php");
+require_once("../../functions/proverki.php");
+require_once("../../functions/path.php");
 
 $Admin = is_admin();
 if(!$Admin){ exit("Нет прав доступа"); }
@@ -12,7 +12,7 @@ if(!$Admin){ exit("Нет прав доступа"); }
 Общие настройки
 -------------------------------*/
 if(!$_GET["stranica"]){
-    header("Location: ../index.php"); exit();
+    header("Location: ../../index.php"); exit();
 }
 else{
     $stranica = proverka1($_GET["stranica"]);
@@ -33,18 +33,17 @@ function write_to_db(){
 
     $arr = [
         "stranica"      => proverka1($_POST["stranica"])
-        ,"title"         => proverka1($_POST["title"])
-        ,"btn_title"     => proverka1($_POST["btn_title"])
-        ,"text"          => proverka2($_POST["text"])
-        ,"meta"          => [
-            "title"             => proverka1($_POST["meta"]["title"])
-            ,"desc"             => proverka1($_POST["meta"]["desc"])
-            ,"keywords"         => proverka1($_POST["meta"]["keywords"])
+        ,"dopRows"          => [
+            "address"             => proverka1($_POST["dopRows"]["address"])
+            ,"phone"             => proverka1($_POST["dopRows"]["phone"])
+            ,"email"             => proverka1($_POST["dopRows"]["email"])
+            ,"hours"             => proverka1($_POST["dopRows"]["hours"])
+            ,"map"             => proverka2($_POST["dopRows"]["map"])
         ]
 
     ];
 
-    $arr["meta"] = addslashes(json_encode($arr["meta"]));
+    $arr["dopRows"] = addslashes(json_encode($arr["dopRows"]));
 
     $response  = db_duplicate_update($table, [0 => $arr]);
     return $response;
@@ -65,7 +64,7 @@ endif;
 Вывод записи
 -------------------------------*/
 $resItem = db_row("SELECT * FROM ".$table." WHERE stranica='".$stranica."'", true)["item"];
-if($resItem["meta"]){$resItem["meta"] = json_decode($resItem["meta"], true);}
+if($resItem["dopRows"]){$resItem["dopRows"] = json_decode($resItem["dopRows"], true);}
 
 ?>
 <!DOCTYPE html>
@@ -75,7 +74,7 @@ if($resItem["meta"]){$resItem["meta"] = json_decode($resItem["meta"], true);}
     <title></title>
     <link rel="shortcut icon" href=""/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="all" href="../css/adm/page_settings.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/adm/page_settings.css"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -96,12 +95,11 @@ if($resItem["meta"]){$resItem["meta"] = json_decode($resItem["meta"], true);}
         <input type="hidden" name="referer" value="<? echo $referer; ?>" />
         <input type="hidden" name="stranica" value="<? echo $stranica; ?>"/>
 
-        <input type="text" name="title" value="<? echo @$resItem["title"]; ?>" placeholder="title"/><br><br>
-        <input type="text" name="btn_title" value="<? echo @$resItem["btn_title"]; ?>" placeholder="btn_title"/><br><br>
-        <input type="text" name="meta[title]" value="<? echo @$resItem["meta"]["title"]; ?>" placeholder="meta[title]"/><br><br>
-        <input type="text" name="meta[desc]" value="<? echo @$resItem["meta"]["desc"]; ?>" placeholder="meta[desc]"/><br><br>
-        <input type="text" name="meta[keywords]" value="<? echo @$resItem["meta"]["keywords"]; ?>" placeholder="meta[keywords]"/><br><br>
-        <textarea name="text" class="js-ckeditor"><? echo @$resItem["text"]; ?></textarea><br><br>
+        <input type="text" name="dopRows[address]" value="<? echo @$resItem["dopRows"]["address"]; ?>" placeholder="[dopRows][address]"/><br><br>
+        <input type="text" name="dopRows[phone]" value="<? echo @$resItem["dopRows"]["phone"]; ?>" placeholder="[dopRows][phone]"/><br><br>
+        <input type="text" name="dopRows[email]" value="<? echo @$resItem["dopRows"]["email"]; ?>" placeholder="[dopRows][email]"/><br><br>
+        <input type="text" name="dopRows[hours]" value="<? echo @$resItem["dopRows"]["hours"]; ?>" placeholder="meta[[dopRows][hours]]"/><br><br>
+        <textarea name="dopRows[map]" placeholder="карта (html)"><? echo @$resItem["dopRows"]["map"]; ?></textarea><br><br>
 
         <input name="submit" type="submit" value="готово"/>
     </form>
@@ -110,14 +108,14 @@ if($resItem["meta"]){$resItem["meta"] = json_decode($resItem["meta"], true);}
 
 
 
-<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
 
-<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="../ckeditor/adapters/jquery.min.js"></script>
+<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../ckeditor/adapters/jquery.min.js"></script>
 
 
-<script type="text/javascript" src="../js/adm/page_settings.js"></script>
-<script type="text/javascript" src="../js/adm/forEditor.js"></script>
+<script type="text/javascript" src="../../js/adm/page_settings.js"></script>
+<script type="text/javascript" src="../../js/adm/forEditor.js"></script>
 </body>
 </html>
 

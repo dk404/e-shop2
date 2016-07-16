@@ -11,12 +11,20 @@ $Admin = is_admin();
 
 $stranica = "home";
 
+/*-------------------------------
+Информация про эту страницу
+-------------------------------*/
+$PageInfo = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
+if($PageInfo["meta"]){$PageInfo["meta"] = json_decode($PageInfo["meta"], true);}
+
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Shopin A Ecommerce Category Flat Bootstrap Responsive Website Template | Home :: w3layouts</title>
+    
+<title><? echo @$PageInfo["meta"]["title"] ?></title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!-- Custom Theme files -->
 <!--theme-style-->
@@ -24,8 +32,8 @@ $stranica = "home";
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<meta name="keywords" content="<? echo @$PageInfo["keywords"]?> " />
+<meta name="description" content="<? echo @$PageInfo["desc"]?> " />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
 <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />
@@ -124,7 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
-            <li><a class="color" href="index.php">Home</a></li>
+            <li><a class="color" href="index.php"><? echo @$PageInfo["btn_title"]?></a></li>
             
     		<li class="dropdown mega-dropdown active">
 			    <a class="color1" href="#" class="dropdown-toggle" data-toggle="dropdown">Women<span class="caret"></span></a>				
@@ -258,7 +266,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<li><a class="color3" href="product.html">Sale</a></li>
 			<li><a class="color4" href="404.html">About</a></li>
             <li><a class="color5" href="typo.html">Short Codes</a></li>
-            <li ><a class="color6" href="contact.html">Contact</a></li>
+            <li ><a class="color6" href="contact.php">Contact</a></li>
         </ul>
      </div><!-- /.navbar-collapse -->
 
@@ -694,9 +702,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<h6>Information</h6>
 						<ul class=" in">
 							<li><a href="404.html">About</a></li>
-							<li><a href="contact.html">Contact Us</a></li>
+							<li><a href="contact.php">Contact Us</a></li>
 							<li><a href="#">Returns</a></li>
-							<li><a href="contact.html">Site Map</a></li>
+							<li><a href="contact.php">Site Map</a></li>
 						</ul>
 						<ul class="in in1">
 							<li><a href="#">Order History</a></li>
@@ -750,7 +758,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
         <ul class="listBtns">
             <li>
-                <a href="adm/page_settings.php?method_name=edit&ID=<? echo null ?>">Редактировать старницу</a>
+                <a href="adm/page_settings.php?stranica=<? echo $stranica ?>">Редактировать старницу</a>
             </li>
             <li>
                 <a href="adm/categories.php">Соц. сети</a>

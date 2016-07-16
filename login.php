@@ -4,7 +4,8 @@ require_once("functions/proverki.php");
 require_once("functions/auth.php");
 require_once("functions/path.php");
 
-
+$me = is_auth();
+$Admin = is_admin();
 /*-------------------------------
 Выход
 -------------------------------*/
@@ -12,7 +13,7 @@ if($_GET["logout"]){
     auth_exit();
     header("Location: index.php"); exit();
 }
-
+$stranica = "login";
 
 
 if(isset($_POST["method_name"])):
@@ -41,9 +42,16 @@ endif;
 
 
 /*------------------------------
-Дополн ф-ии
+Вывод инфо про стр логин
 -------------------------------*/
+$PageInfo = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
+if($PageInfo["meta"]){$PageInfo["meta"] = json_decode($PageInfo["meta"], true);}
 
+
+/*------------------------------
+Вывод инфо про стр регистр
+-------------------------------*/
+$PageInfo2 = db_row("SELECT title, text FROM page_settings WHERE stranica='register'")["item"];
 
 ?>
 <!DOCTYPE html>
@@ -61,7 +69,10 @@ endif;
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--theme-style-->
-<link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />	
+	<link href="css/adm_elem.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />
 <!--//theme-style-->
 <script src="js/jquery.min.js"></script>
 <!--- start-rate---->
@@ -104,9 +115,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 		<div class="col-sm-5 col-md-offset-2  header-login">
 					<ul >
-						<li><a href="login.php">Login</a></li>
-						<li><a href="register.php">Register</a></li>
+						<? if(!$me){ ?>
+
+							<li><a href="login.php">Login</a></li>
+							<li><a href="register.php">Register</a></li>
+						<? }else{ ?>
+							<li><a href="login.php?logout=true">Logout</a></li>
+						<? } ?>
 						<li><a href="checkout.html">Checkout</a></li>
+
 					</ul>
 				</div>
 				
@@ -278,7 +295,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<li><a class="color3" href="product.html">Sale</a></li>
 			<li><a class="color4" href="404.html">About</a></li>
             <li><a class="color5" href="typo.html">Short Codes</a></li>
-            <li ><a class="color6" href="contact.html">Contact</a></li>
+            <li ><a class="color6" href="contact.php">Contact</a></li>
         </ul>
      </div><!-- /.navbar-collapse -->
 
@@ -372,10 +389,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</label>
 			</div>
 			<div class="col-md-6 login-right">
-				 <h3>Completely Free Account</h3>
-				 
-				 <p>Pellentesque neque leo, dictum sit amet accumsan non, dignissim ac mauris. Mauris rhoncus, lectus tincidunt tempus aliquam, odio 
-				 libero tincidunt metus, sed euismod elit enim ut mi. Nulla porttitor et dolor sed condimentum. Praesent porttitor lorem dui, in pulvinar enim rhoncus vitae. Curabitur tincidunt, turpis ac lobortis hendrerit, ex elit vestibulum est, at faucibus erat ligula non neque.</p>
+				 <h3><? echo @$PageInfo2["title"] ?></h3>
+
+				 <? echo @$PageInfo2["text"]?>
 				<a href="register.php" class=" hvr-skew-backward">Register</a>
 
 			</div>
@@ -424,9 +440,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<h6>Information</h6>
 						<ul class=" in">
 							<li><a href="404.html">About</a></li>
-							<li><a href="contact.html">Contact Us</a></li>
+							<li><a href="contact.php">Contact Us</a></li>
 							<li><a href="#">Returns</a></li>
-							<li><a href="contact.html">Site Map</a></li>
+							<li><a href="contact.php">Site Map</a></li>
 						</ul>
 						<ul class="in in1">
 							<li><a href="#">Order History</a></li>
@@ -471,9 +487,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 		<!--//footer-->
+<? if(is_admin()): ?>
+	<!--Админ панель-->
+	<section id="admBar">
+		<a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
+		<ul class="listBtns">
+			<li>
+				<a href="adm/page_settings.php?stranica=<? echo $stranica ?>">Редактировать старницу</a>
+			</li>
+			<li>
+				<a href="adm/categories.php">Соц. сети</a>
+			</li>
+			<li>
+				<a href="adm/forSlider.php?stranica=<? echo $stranica ?>">Text слайдер</a>
+			</li>
+
+		</ul>
+
+
+	</section>
+
+<? endif; ?>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-
+<script src="js/face/admBar.js" type="text/javascript"></script>
 	<script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
 <script src="js/bootstrap.min.js"></script>
