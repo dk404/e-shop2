@@ -4,6 +4,12 @@ require_once("functions/DB.php");
 require_once("functions/auth.php");
 
 
+//Разлогиниваем и редиректим
+if($_GET["logout"] == 1){
+	require_once "functions/logout.php";
+}
+
+
 
 ?><!--A Design by W3layouts
 Author: W3layout

@@ -8,6 +8,11 @@ require_once("functions/path.php");
 //Общие настройки
 $this_page = path_withoutGet();
 
+//Разлогиниваем и редиректим
+if($_GET["logout"] === 1){
+	require_once "functions/logout.php";
+}
+
 
 
 

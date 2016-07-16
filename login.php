@@ -7,26 +7,24 @@ require_once("functions/auth.php");
 
 //Адресс этой страницы
 $this_page = path_withoutGet();
+
 //Разлогиниваем и редиректим
-if($_GET["logout"] == 1){
-	setcookie('ID', null, strtotime('-1 day'));
-	setcookie("token", null, strtotime('-1 day'));
-	echo "<script>window.location = 'index.php'</script>";
+if($_GET["logout"] === 1){
+	require_once "functions/logout.php";
 }
 
 //Если передана форма
 if($_POST["method_name"] === "auth"){
-	switch($_POST["method_name"]){
-		case $_POST["method_name"] === "auth" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && proverka1($_POST["pass"]):
-			$email = strtolower($_POST["email"]);
-			$pass = md5(proverka1($_POST["pass"]));
-			$result = db_select("SELECT * FROM users WHERE email=$email AND pass=$pass")["items"][0];
-			if($result){
-				setcookie("ID", $result["items"]['ID'], strtotime("+1 day"), "/");
-				setcookie("ID", $result["items"]['pass'], strtotime("+1 day"), "/");
-				echo "<script>window.location = 'index.php'</script>";
-			}
-	}
+    if( filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && proverka1($_POST["pass"])):
+        $email = strtolower($_POST["email"]);
+        $pass = md5(proverka1($_POST["pass"]));
+        $result = db_select("SELECT * FROM users WHERE email='".$email."' AND pass='".$pass."'")["items"][0];
+        if($result){
+            setcookie("ID", $result['ID'], strtotime("+1 day"), "/");
+            setcookie("token", $result['pass'], strtotime("+1 day"), "/");
+            echo "<script>window.location = 'index.php'</script>";
+        }
+    endif;
 }
 
 ?>
@@ -467,6 +465,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
 <script src="js/bootstrap.min.js"></script>
+
+<div style="position: absolute; padding: 20px; top: 0; right: 0; background: #a8a8a8;">
+    <ul><?php foreach ($_COOKIE as $key=>$val):?>
+        <li><span><?php echo $key;?></span> = <span><?php echo $val?></span></li>
+        <?php endforeach;?>
+    </ul>
+</div>
  
 </body>
 </html>
