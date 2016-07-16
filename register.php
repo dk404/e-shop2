@@ -11,69 +11,37 @@ $this_page = path_withoutGet();
 
 
 
-if(isset($_POST["submit"])):
+if(isset($_POST["method_name"])):
 
-	switch ($_POST["method_name"]):
-		case $_POST["method_name"] == "register" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && $_POST["pass"]:
+	if($_POST["method_name"] == "register" AND filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) AND isset($_POST["pass"])):
 
-			$email  = strtolower(filter_var($_POST["email"]));
-			$pass   = proverka1($_POST["pass"]);
-			$nick   = proverka1($_POST["nickname"]);
-			$errors = [];
-			//Узанаем есть ли уже такой пользователь
-			$resDb = db_select("SELECT ID FROM users WHERE email='".$email."'");
-			if($resDb["items"]){
-				exit("Такой пользователь уже существует");
-			}
-//			else{
+		$email  = strtolower($_POST["email"]);
+		$pass   = filter_var($_POST["pass"], FILTER_VALIDATE_INT);
+		$nick   = proverka1($_POST["nickname"]);
+		$phone = filter_var($_POST["phone"], FILTER_VALIDATE_INT);
+		$errors = [];
 
-//				//Добавим картинку
-//				if($_FILES["avatar"]["tmp_name"]){
-//					$resPhoto = photo_add_once(["maw" => 800, "miw" => 160, "path" => "FILES/avatars", "inputName" => "avatar"]);
-//					if($resPhoto["error"]){exit($resPhoto["error"]);}
-//				}
-			//Подготовим массив для insert
-				$tmp  = [
-					"email"     => $email
-					,"pass"     => md5($pass)
-					,"nickname" => $nick
-					,"date"     => time()
-					//,"avatar"   => @$resPhoto["filename"]
-				];
+		//Узанаем есть ли уже такой пользователь
+		$resDb = db_select("SELECT ID FROM users WHERE email='".$email."'");
+		if($resDb["items"]){
+			exit("Такой пользователь уже существует");
+		}
+		//Подготовим массив для insert'a
+		$tmp  = [
+			"email"     => $email
+			,"pass"     => md5($pass)
+			,"nickname" => $nick
+			,"date"     => time()
+			,"phone"    => $phone
+		];
 
-				$resDb = db_insert("users", $tmp, true);
-				if(!$resDb){exit("Ошибка при записи в бд. На строке:".__LINE__);}
+		$resDb = db_insert("users", $tmp, true);
+		if(!$resDb){exit("Ошибка при записи в бд. На строке:".__LINE__);}
 
-
-				setcookie("ID", $resDb["ID"], strtotime("+1 day"), "/");
-				setcookie("token", $tmp["pass"], strtotime("+1 day"), "/");
-
-				echo "
-                        <script>
-                            window.location = 'index.php';
-                        </script>";
-				$goto = true;
-			}
-			break;
-
-		case $_POST["method_name"] == "auth" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && $_POST["pass"]:
-			$email  = strtolower(filter_var($_POST["email"]));
-			$pass   = proverka1($_POST["pass"]);
-
-			$resDb = db_select("SELECT * FROM users WHERE email='".$email."' AND pass='".md5($pass)."'")["items"][0];
-			if($resDb){
-				setcookie("ID", $resDb["ID"], strtotime("+1 day"), "/");
-				setcookie("token", $resDb["pass"], strtotime("+1 day"), "/");
-			}
-
-			echo "
-                        <script>
-                            window.location = 'index.php';
-                        </script>";
-
-
-			break;
-	endswitch;
+		setcookie("ID", $resDb["ID"], strtotime("+1 day"), "/");
+		setcookie("token", $tmp["pass"], strtotime("+1 day"), "/");
+		echo "<script>window.location = 'index.php';</script>";
+	endif;
 
 endif;
 
@@ -180,7 +148,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       </button>
      
    </div> 
-   <!-- Collect the nav links, forms, and other content for toggling -->
+   <!-- Collect the nav links, for ms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
             <li><a class="color" href="index.php">Home</a></li>
@@ -390,22 +358,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--login-->
 <div class="container">
 		<div class="login">
-			<form action="<? echo $this_page;?>" method="post" enctype="multipart/form-data">
+			<form action="<? echo $_SERVER["PHP_SELF"];?>" method="post" enctype="multipart/form-data">
 			<div class="col-md-6 login-do">
 			<div class="login-mail">
-					<input type="text" placeholder="Name" required="">
+				<input type="hidden" name="method_name" value="register">
+					<input type="text" placeholder="Name" required="" name="nickname">
 					<i  class="glyphicon glyphicon-user"></i>
 				</div>
 				<div class="login-mail">
-					<input type="text" placeholder="Phone Number" required="">
+					<input type="text" placeholder="Phone Number" required="" name="phone">
 					<i  class="glyphicon glyphicon-phone"></i>
 				</div>
 				<div class="login-mail">
-					<input type="text" placeholder="Email" required="">
+					<input type="text" placeholder="Email" required="" name="email">
 					<i  class="glyphicon glyphicon-envelope"></i>
 				</div>
 				<div class="login-mail">
-					<input type="password" placeholder="Password" required="">
+					<input type="password" placeholder="Password" required="" name="pass">
 					<i class="glyphicon glyphicon-lock"></i>
 				</div>
 				   <a class="news-letter " href="#">
