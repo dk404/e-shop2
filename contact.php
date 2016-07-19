@@ -3,12 +3,34 @@ require_once("functions/DB.php");
 require_once("functions/proverki.php");
 require_once("functions/auth.php");
 require_once("functions/path.php");
+require_once("functions/Mail.php");
 
 /********************************
 Общие настройки
  ********************************/
 $thisPage = path_withoutGet();
 $stranica  = "contact";
+
+
+/*------------------------------
+Если была отправлена форма
+-------------------------------*/
+if($_POST["forms"] && !$_POST["message"] && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+    $m= new email_Mail();
+    $m->From( $_POST["name"].";".$_POST["email"] ); // от кого Можно использовать имя, отделяется точкой с запятой
+    $m->To( "kuda@asd.ru" );   // кому, в этом поле так же разрешено указывать имя
+    $m->Subject($_POST["subject"]);
+    $m->Body($_POST["text"], "html");
+    $resend = $m->Send();	// отправка
+    if(!$resend){
+        echo "<script>alert('".$m->status_mail["message"]."')</script>";
+    }
+    else{
+        echo "<script>alert('Ваше письмо отправленно')</script>";
+
+    }
+}
+
 
 /*------------------------------
 Достенем инфо про эту страницу
@@ -70,6 +92,18 @@ if($resInfo){
     			});
     		});
     		</script>
+
+    <style>
+        .Message{
+            width: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            border: 0;
+            float: left;
+        }
+    </style>
+
 <!---//End-rate---->
 </head>
 <body>
@@ -123,7 +157,7 @@ if($resInfo){
       </button>
      
    </div> 
-   <!-- Collect the nav links, forms, and other content for toggling -->
+           <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
             <li><a class="color" href="index.php">Home</a></li>
@@ -388,23 +422,25 @@ if($resInfo){
 				</div>
 				<div class="col-md-6 contact-top">
 					<h3>Want to work with me?</h3>
-					<form>
-						<div>
+					<form action="<? echo path_withoutGet() ?>" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="forms" value="auth">
+                        <div>
 							<span>Your Name </span>		
-							<input type="text" value="" >						
+							<input name="name" type="text" value="" >
 						</div>
 						<div>
 							<span>Your Email </span>		
-							<input type="text" value="" >						
+							<input name="email" type="text" value="" >
 						</div>
 						<div>
 							<span>Subject</span>		
-							<input type="text" value="" >	
+							<input name="subject" type="text" value="" >
 						</div>
 						<div>
 							<span>Your Message</span>		
-							<textarea> </textarea>	
+							<textarea name="text"> </textarea>
 						</div>
+						<input class="Message" type="text" name="message">
 						<label class="hvr-skew-backward">
 								<input type="submit" value="Send" >
 						</label>
@@ -498,7 +534,7 @@ if($resInfo){
 						<li><a href="#"><img src="images/f2.png" class="img-responsive" alt=""></a></li>
 						<li><a href="#"><img src="images/f3.png" class="img-responsive" alt=""></a></li>
 					</ul>
-					<p class="footer-class">&copy; 2016 Shopin. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+					<p class="footer-class">&copy; <? echo date("Y"); ?> Shopin. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
 					<div class="clearfix"> </div>
 				</div>
 			</div>
