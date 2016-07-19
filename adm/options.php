@@ -12,6 +12,31 @@ if($_GET["method_name"] == "deleteBigSlider" && is_numeric($_GET["ID"])){
     if(!$resDb["error"]){ echo 1; }
 }
 
+//Удалить элемент из брендов
+if($_GET["method_name"] == "deleteBrand" && is_numeric($_GET["ID"])){
+
+    $arr = [
+        "ID" => $_GET["ID"]
+        ,"table" => "brands"
+        ,"imgDir" => "forBrands"
+    ];
+
+    $resDel = delItem($arr);
+
+
+    //response
+    if($_SERVER['HTTP_X_REQUESTED_WITH']!='XMLHttpRequest') {
+
+        header("Location: ".$_SERVER["HTTP_REFERER"]);
+    }
+    else
+    {
+        print_r(json_encode($resDel)); exit();
+    }
+
+
+    if(!$resDel["error"]){ echo 1; }
+}
 //Сортировка
 if($_POST["method_name"] == "sort" && $_POST["table"]){
 
@@ -93,6 +118,45 @@ if($_GET["method_name"] == "deleteProduct" && is_numeric($_GET["ID"])){
     {
         print_r(json_encode($response)); exit();
     }
+
+
+}
+
+
+//Универсальная ф-ия del
+function delItem($array){
+
+
+    $ID         = $array["ID"];
+    $table      = $array["table"];
+    $imgDir     = $array["imgDir"]; //название папки где лежит фото
+    $imgCol     = ($array["imgCol"])? $array["imgCol"] : "img"; //название поля в бд где храниться название фотки
+
+    $response = ["error" => false, "response" => null];
+
+    //сделаем выборку этой записи
+    $resItem = db_row("SELECT * FROM ".$table." WHERE ID='".$ID."'")["item"];
+    if(!$resItem){ $response["error"] = "Ошибка: такой записи не обнаружено"; return  $response;   }
+
+    //Удаляем саму запись
+    $resDel1 = db_delete($table, "ID='".$ID."'");
+    if($resDel1["error"]){ $response["error"] = $resDel1["error"]; return  $response;   }
+
+    //Удалим фото
+    if($imgDir && $resItem[$imgCol]){
+        $path = "../FILES/".$imgDir."/";
+        $tmp = ["big/", "small/"];
+
+        foreach ($tmp as $item) {
+            $yy = $path.$item.$resItem[$imgCol];
+            if(file_exists($yy)){ unlink($path.$item.$resItem[$imgCol]); }
+        }
+
+    }
+
+    //response
+    $response["response"] = $resDel1;
+    return  $response;
 
 
 }

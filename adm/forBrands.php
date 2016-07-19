@@ -24,26 +24,23 @@ if(isset($_POST["submit"])):
     $arr = [
         "maw"       => 1000
        ,"miw"       => 320
-       ,"path"      => "../FILES/forBrands"
-       ,"inputName" => "photo"
+       ,"path"      => "../FILES/forBrands/"
+       ,"inputName" => "img"
 
     ];
 
-    $resAdd = photo_add_few($arr);
-    $resAdd = array_column($resAdd, "filename");
+    $resAdd = photo_add_once($arr);
 
-    if(count($resAdd))
+    if($resAdd["filename"])
     {
-        $arr = [];
-        foreach ($resAdd as $item) {
-            $arr[] = [
-              "stranica" => $_POST["stranica"]
-              ,"photo"   => $item
-            ];
-        }
+        $arr = [
+             "img" => $resAdd["filename"]
+            ,"href" => $_POST["href"]
+        ];
+
 
         //пишем в базу
-        $resDb = db_duplicate_update("brands", $arr);
+        $resDb = db_insert("brands", $arr);
 
     }
 
@@ -72,7 +69,7 @@ endif;
 /*------------------------------
 Вывод записей
 -------------------------------*/
-$Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' ORDER BY nomer", true)["items"];
+$Items = db_select("SELECT * FROM brands ORDER BY nomer", true)["items"];
 
 
 ?>
@@ -80,7 +77,7 @@ $Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' OR
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <title>Работа с брендом</title>
+    <title>Работа с брендами</title>
     <link rel="shortcut icon" href=""/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="../js/sort/jquery-ui.min.css" rel="stylesheet" >
@@ -104,17 +101,18 @@ $Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' OR
         <form action="" method="post" enctype="multipart/form-data" name="myForm" target="_self">
             <input type="hidden" name="referer" value="<? echo $referer; ?>"/>
             <input type="hidden" name="stranica" value="<? echo $forStranica; ?>"/>
-            <input type="file" name="photo[]" multiple/>
-
-            <input name="submit" type="submit" value="Загрузить"/>
+            <input type="file" name="img" />
+            <input name="submit" type="submit" value="Загрузить"/><br>
+            <p>Href</p>
+            <input type="text" name="href">
         </form>
     </section>
 
     <? if($Items): ?>
-    <ul class="listItems sort_cont" data-js-sort="bigSlider">
+    <ul class="listItems sort_cont" data-js-sort="brands">
         <? foreach ($Items as $item) {  ?>
         <li id="<? echo "nomer_".$item["ID"]; ?>">
-            <a class="js-delItem" href="options.php?method_name=deleteBigSlider&ID=<? echo $item["ID"]; ?>" style="background-image:url('../FILES/forSlider/small/<? echo $item["photo"] ?>');"><span class="bg"></span><i class="material-icons">&#xE14C;</i></a>
+            <a class="js-delItem" href="options.php?method_name=deleteBrand&ID=<? echo $item["ID"]; ?>" style="background-image:url('../FILES/forBrands/small/<? echo $item["img"] ?>');"><span class="bg"></span><i class="material-icons">&#xE14C;</i></a>
         </li>
         <? } ?>
     </ul>
@@ -125,10 +123,10 @@ $Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' OR
 
 
 
-<script type="text/javascript" src="../js/jquery-2.2.4.min.js"></script>
+<script src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="../js/sort/jquery-ui.min.js"></script>
 <script type="text/javascript" src="../js/sort/for_sort.js"></script>
-<script type="text/javascript" src="../js/adm/page_settings.min.js"></script>
+<script type="text/javascript" src="../js/adm/page_settings.js"></script>
 </body>
 </html>
 

@@ -31,8 +31,13 @@ $(document).ready(function () {
 
         var href   = $(this).attr("href"),
             parenT = $(this).parent("li");
-        $.get(href, function (d) {
-            if(d){
+
+
+        $.get(href, function (data) {
+
+            var res = JSON.parse( data );
+            if(res.error){ alert(res.error); return false; }
+            else{
                 $(parenT).fadeOut("fast").remove();
             }
 
