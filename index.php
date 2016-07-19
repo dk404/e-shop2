@@ -766,7 +766,9 @@ if($PageInfo["meta"]){$PageInfo["meta"] = json_decode($PageInfo["meta"], true);}
             <li>
                 <a href="adm/forSlider.php?stranica=<? echo $stranica ?>">Text слайдер</a>
             </li>
-
+			<li>
+				<a href="adm/forBrands.php">Бренды</a>
+			</li>
         </ul>
 
 

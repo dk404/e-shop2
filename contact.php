@@ -2,6 +2,8 @@
 require_once("functions/DB.php");
 require_once("functions/auth.php");
 require_once("functions/path.php");
+require_once("functions/Mail.php");
+
 
 /*-------------------------------
 Общие настройки
@@ -10,6 +12,31 @@ $me = is_auth();
 $Admin = is_admin();
 
 $stranica = "contact";
+
+/*-------------------------------
+если была оьправленна форма
+-------------------------------*/
+if($_POST["forma"] && !$_POST["sub"] && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+
+
+    $mes = "Имя: ".$_POST["name"]."<br>"."E-mail: ".$_POST["email"]."<br>"."Тема: ".$_POST["subj"]."<br>"."Сообщение: ".$_POST["massage"]."<br>";
+    $M = new email_Mail;
+    $M->From( $_POST["name"].";".$_POST["email"] );
+    $M->To( "dinozav1@yandex.ru" );   // кому, в этом поле так же разрешено указывать имя
+    $M->Subject( $_POST["subj"] );
+    $M->Body($mes, "html");
+    $resSend = $M->Send();
+    if(!$resSend){
+        $error = $M->status_mail["message"];
+        echo "<script>alert('".$error."');</script>";
+    }else{
+        echo "<script>alert('Письмо успешно отправлено');</script>";
+
+    }
+
+
+
+}
 
 /*-------------------------------
 Информация про эту страницу
@@ -66,6 +93,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		});
 	</script>
 	<!---//End-rate---->
+    <style>
+        .sub{
+            width: 0 !important;
+            height: 0 !important;
+            border: 0 !important;
+            padding: 0;
+            margin: 0;
+            float: left;
+        }
+    </style>
 </head>
 <body>
 <!--header-->
@@ -381,22 +418,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 			<div class="col-md-6 contact-top">
 				<h3>Want to work with me?</h3>
-				<form>
+				<form action="<? echo path_withoutGet() ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="forma" value="forma">
 					<div>
 						<span>Your Name </span>
-						<input type="text" value="" >
+						<input name="name" type="text" value="" >
 					</div>
 					<div>
 						<span>Your Email </span>
-						<input type="text" value="" >
+						<input name="email" type="text" value="" >
 					</div>
 					<div>
 						<span>Subject</span>
-						<input type="text" value="" >
+						<input name="subj" type="text" value="" >
+
 					</div>
+                    <input name="sub" type="text" class="sub" value="" >
 					<div>
 						<span>Your Message</span>
-						<textarea> </textarea>
+						<textarea name="massage"> </textarea>
 					</div>
 					<label class="hvr-skew-backward">
 						<input type="submit" value="Send" >

@@ -24,7 +24,7 @@ if(isset($_POST["submit"])):
     $arr = [
         "maw"       => 1000
        ,"miw"       => 320
-       ,"path"      => "../FILES/forSlider"
+       ,"path"      => "../FILES/forBrands"
        ,"inputName" => "photo"
 
     ];
@@ -43,7 +43,7 @@ if(isset($_POST["submit"])):
         }
 
         //пишем в базу
-        $resDb = db_duplicate_update("bigSlider", $arr);
+        $resDb = db_duplicate_update("brands", $arr);
 
     }
 
@@ -80,7 +80,7 @@ $Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' OR
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <title>Работа со слайдером</title>
+    <title>Работа с брендом</title>
     <link rel="shortcut icon" href=""/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="../js/sort/jquery-ui.min.css" rel="stylesheet" >
@@ -100,7 +100,7 @@ $Items = db_select("SELECT * FROM bigSlider WHERE stranica='".$forStranica."' OR
 
 <section id="bigSlider">
     <section class="addItems">
-        <h3>Добавить слайдер</h3>
+        <h3>Добавить бренды</h3>
         <form action="" method="post" enctype="multipart/form-data" name="myForm" target="_self">
             <input type="hidden" name="referer" value="<? echo $referer; ?>"/>
             <input type="hidden" name="stranica" value="<? echo $forStranica; ?>"/>

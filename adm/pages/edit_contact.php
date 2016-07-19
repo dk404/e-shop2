@@ -38,7 +38,7 @@ function write_to_db(){
             ,"phone"             => proverka1($_POST["dopRows"]["phone"])
             ,"email"             => proverka1($_POST["dopRows"]["email"])
             ,"hours"             => proverka1($_POST["dopRows"]["hours"])
-            ,"map"             => proverka2($_POST["dopRows"]["map"])
+            ,"map"             => ($_POST["dopRows"]["map"])
         ]
 
     ];
