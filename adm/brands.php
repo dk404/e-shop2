@@ -22,7 +22,7 @@ else{
 
 
 $thisPage       = path_withoutGet();
-$table          = "partners";
+$table          = "brands";
 
 
 /*------------------------------
@@ -146,7 +146,7 @@ endif;
 /*------------------------------
 Вывод записи
 -------------------------------*/
-$Items = db_select("SELECT * FROM partners ORDER BY nomer ASC", true)["items"];
+$Items = db_select("SELECT * FROM ".$table." ORDER BY nomer ASC", true)["items"];
 
 ?>
 <!DOCTYPE html>

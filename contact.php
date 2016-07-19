@@ -556,7 +556,7 @@ if($resInfo){
                 <a href="adm/socials.php">Соц. сети</a>
             </li>
             <li>
-                <a href="adm/partners.php">Партнеры</a>
+                <a href="adm/brands.php">Партнеры</a>
             </li>
 
         </ul>

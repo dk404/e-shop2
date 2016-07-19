@@ -31,7 +31,7 @@ if($TextSlider["small_title2"]){ $TextSlider["small_title2"] = json_decode($Text
 /*------------------------------
 Вывод для partners
 -------------------------------*/
-$Partners = db_select("SELECT * FROM partners ORDER BY nomer LIMIT 0, 4")["items"];
+$Partners = db_select("SELECT * FROM brands ORDER BY nomer LIMIT 0, 4")["items"];
 
 ?>
 
@@ -783,7 +783,7 @@ $Partners = db_select("SELECT * FROM partners ORDER BY nomer LIMIT 0, 4")["items
 				<a href="adm/text_slider.php?stranica=<? echo $stranica; ?>">Текст слайдер</a>
 			</li>
             <li>
-				<a href="adm/partners.php">Партнеры</a>
+				<a href="adm/brands.php">Brands</a>
 			</li>
 
 		</ul>

@@ -522,7 +522,7 @@ if($resInfo2){ $resInfo2["meta"] = json_decode($resInfo2["meta"], true); }
                 <a href="adm/socials.php">Соц. сети</a>
             </li>
             <li>
-                <a href="adm/partners.php">Партнеры</a>
+                <a href="adm/brands.php">Партнеры</a>
             </li>
 
         </ul>
