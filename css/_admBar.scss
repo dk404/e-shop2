@@ -1,14 +1,5 @@
 @charset "UTF-8";
-
-/*------------------------------
-Общие настройки
--------------------------------*/
-.noScroll{
-  overflow-y: hidden;
-}
-$darkGray:#37363a;
-$blue: #4bbaff;
-$red: #d92200;
+@import "settings";
 
 /*------------------------------
 Блок для админ панели
@@ -33,7 +24,7 @@ $red: #d92200;
     padding: 5px 10px;
 
     &:hover, &.active{
-      color: $blue ;
+      color: $red ;
 
     }
   }
@@ -42,8 +33,6 @@ $red: #d92200;
     list-style: none;
     padding: 0;
     margin: 30px 10px;
-    background: $darkGray;
-
 
     li{
       padding: 6px 8px;
@@ -54,21 +43,13 @@ $red: #d92200;
         font-size: 14px;
         text-decoration: none;
         color: white;
+        font-family: Verdana, Geneva, sans-serif;
 
         &:hover{
-          color: $blue;
+          color: $red;
         }
       }
     }
 
   }
-}
-a.login{
-  display:block;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 80px;
-  height: 80px;
-  text-decoration: none;
 }

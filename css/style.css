@@ -109,7 +109,12 @@ ul.nav_1 li a {
     font-size: 0.9em;
     color: #3A3A3A;
 	padding: 1.6em;
+    text-transform: lowercase;
 }
+    ul.nav_1 li a:first-letter{
+        text-transform: uppercase;
+    }
+
 ul.nav_1 li {
     border-right:1px solid #EFEFEF;
 }

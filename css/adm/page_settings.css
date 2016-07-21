@@ -1,12 +1,4 @@
 @charset "UTF-8";
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-height: 100%;
-  background: #e1e1e1;
-  font-family: Verdana, sans-serif; }
-
 #bigSlider .listItems, #bigSlider .listItems > li a, #products > .catBlock .flex, #products > .listItems > li {
   display: flex;
   flex-wrap: wrap; }
@@ -20,6 +12,9 @@ html, body {
   position: relative;
   max-width: 1024px;
   margin: 0 auto; }
+
+.noScroll {
+  overflow-y: hidden; }
 
 /*-----------------------------------
 Доп Классы
@@ -1236,6 +1231,14 @@ html, body {
 /*-----------------------------------
 Общие настройки
 -----------------------------------*/
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  font-family: Verdana, Geneva, sans-serif;
+  background: #eaeaea; }
+
 a.return {
   display: block;
   transition: all 0.3s ease; }
@@ -1243,9 +1246,9 @@ a.return {
     display: inline-block;
     padding: 5px;
     font-size: 28px;
-    color: #37363a; }
+    color: #2E2E2E; }
   a.return:hover {
-    background: rgba(55, 54, 58, 0.1); }
+    background: rgba(46, 46, 46, 0.1); }
     a.return:hover i {
       color: white; }
 
@@ -1256,18 +1259,21 @@ a.addPage {
   margin: 50px auto;
   font-size: 16px;
   font-weight: bold;
-  color: #4bbaff; }
+  color: #F67777;
+  text-decoration: none; }
   a.addPage:hover, a.addPage.active {
-    color: #18a6ff; }
+    color: #f34747; }
+  a.addPage span {
+    border-bottom: 1px dashed; }
 
 h3 {
-  color: #37363a; }
+  color: #2E2E2E; }
 
 .st-formCont {
   position: relative;
   box-sizing: border-box;
   padding: 10px;
-  border: 1px solid rgba(55, 54, 58, 0.3); }
+  border: 1px solid rgba(46, 46, 46, 0.3); }
   .st-formCont .row {
     margin-bottom: 10px; }
     .st-formCont .row p {
@@ -1289,25 +1295,25 @@ h3 {
     display: inline-block;
     font-size: 18px;
     padding: 2px 4px;
-    color: #4bbaff;
+    color: #F67777;
     vertical-align: middle;
     margin: 5px; }
     .postrNav a:hover {
       color: white;
-      background: #4bbaff; }
+      background: #F67777; }
   .postrNav span {
     font-size: 18px;
     display: inline-block;
     padding: 2px 4px;
     color: white;
-    background: #4bbaff;
+    background: #F67777;
     vertical-align: middle; }
 
 /*-----------------------------------
 ---####---
 -----------------------------------*/
 section.addForm {
-  border: 1px solid #4bbaff;
+  border: 1px solid #F67777;
   padding: 15px;
   box-sizing: border-box; }
 
@@ -1323,19 +1329,19 @@ section.list {
       justify-content: space-between;
       margin-bottom: 5px;
       padding: 10px;
-      border-bottom: 1px solid #37363a; }
+      border-bottom: 1px solid #2E2E2E; }
       section.list ul.pageItems li:hover {
-        background: #cbebff; }
+        background: #feefef; }
       section.list ul.pageItems li > a {
         font-size: 16px;
-        color: #37363a;
+        color: #2E2E2E;
         text-decoration: none; }
       section.list ul.pageItems li > .settings a {
         display: inline-block;
         margin-left: 10px;
         font-size: 14px;
         text-decoration: none;
-        color: #4bbaff; }
+        color: #F67777; }
         section.list ul.pageItems li > .settings a:hover {
           color: red; }
 
@@ -1360,7 +1366,7 @@ section.addForm {
   position: relative;
   margin-top: 35px;
   padding: 15px 0;
-  border-top: 1px solid rgba(55, 54, 58, 0.5); }
+  border-top: 1px solid rgba(46, 46, 46, 0.5); }
   #bigSlider .listItems > li {
     width: 194.8px;
     height: 97.4px;
@@ -1400,7 +1406,7 @@ section.addForm {
   position: relative;
   margin: 35px 0 15px 0; }
   #products > .catBlock h5 {
-    color: #37363a;
+    color: #2E2E2E;
     margin: 0 0 5px 0; }
   #products > .catBlock .flex {
     flex-wrap: nowrap; }
@@ -1410,13 +1416,13 @@ section.addForm {
       font-size: 12px;
       outline: none; }
 #products > .listItems {
-  border-top: 1px solid rgba(55, 54, 58, 0.3); }
+  border-top: 1px solid rgba(46, 46, 46, 0.3); }
   #products > .listItems > li {
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid rgba(55, 54, 58, 0.3);
+    border-bottom: 1px solid rgba(46, 46, 46, 0.3);
     transition: all 0.3s ease; }
     #products > .listItems > li:hover {
       background: rgba(255, 255, 255, 0.15); }
@@ -1424,9 +1430,9 @@ section.addForm {
       position: relative; }
       #products > .listItems > li > .col-1 > .title {
         font-size: 14px;
-        color: #37363a; }
+        color: #2E2E2E; }
         #products > .listItems > li > .col-1 > .title:hover {
-          color: #4bbaff; }
+          color: #F67777; }
     #products > .listItems > li > .col-2 {
       position: relative; }
       #products > .listItems > li > .col-2 a {
@@ -1434,9 +1440,9 @@ section.addForm {
         margin: 0 3px;
         padding: 2px 4px;
         text-decoration: none;
-        color: #37363a; }
+        color: #2E2E2E; }
         #products > .listItems > li > .col-2 a:hover {
-          background: #37363a;
+          background: #2E2E2E;
           color: white; }
         #products > .listItems > li > .col-2 a i {
           font-size: 17px; }

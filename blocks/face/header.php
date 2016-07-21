@@ -1,3 +1,17 @@
+<?
+    //Массив в котором будем хранить название страниц для блока меню
+    $MENU = [
+        "level_1" => ["home"]
+    ];
+
+
+    $resLvl1 = db_select("SELECT * FROM page_settings WHERE stranica IN ('".implode("','", $MENU["level_1"])."')")["items"];
+
+
+?>
+
+
+
 <div class="header">
     <div class="container">
         <div class="head">
@@ -55,7 +69,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
                         <ul class="nav navbar-nav nav_1">
-                            <li><a class="color" href="index.php">Home</a></li>
+
+                            <li><a class="color" href="index.php"><? echo $resLvl1[0]["btn_title"]; ?></a></li>
 
                             <li class="dropdown mega-dropdown active">
                                 <a class="color1" href="#" class="dropdown-toggle" data-toggle="dropdown">Women<span class="caret"></span></a>
