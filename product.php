@@ -840,6 +840,11 @@ if($resInfo){ $resInfo["meta"] = json_decode($resInfo["meta"], true); }
             <li>
                 <a href="adm/brands.php">Партнеры</a>
             </li>
+            <li>
+                <a href="adm/groups.php">Групи</a>
+            </li>
+
+
 
         </ul>
     </section>
