@@ -2,8 +2,8 @@
 require_once("functions/path.php");
 require_once("functions/DB.php");
 require_once("functions/auth.php");
-
-
+//Не плодим много вызовов к БД, а сразу запишем в переменную - админ или нет.
+$admin = (is_admin()['status'] == 3)? true : false;
 //Разлогиниваем и редиректим
 if($_GET["logout"] == 1){
 	require_once "functions/logout.php";
@@ -11,7 +11,8 @@ if($_GET["logout"] == 1){
 
 
 
-?><!--A Design by W3layouts
+?>
+<!--A Design by W3layouts
 Author: W3layout
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -24,6 +25,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 	<!-- Custom Theme files -->
 	<!--theme-style-->
+    <?php if($admin === true):?>
+        <link rel="stylesheet" href="css/adm_elements.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="js/face/admBar.min.js"></script>
+    <?php endif;?>
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!--//theme-style-->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -736,6 +742,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 </div>
 <!--//footer-->
+
+<? if($admin === true): ?>
+    <!--Админ панель-->
+    <section id="admBar">
+        <a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
+        <ul class="listBtns">
+            <li>
+                <a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+            </li>
+
+        </ul>
+    </section>
+    <script src="js/face/admBar.min.js"></script>
+<? endif; ?>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
@@ -749,6 +769,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		$('a.picture').Chocolat();
 	});
 </script>
+
 
 
 </body>
