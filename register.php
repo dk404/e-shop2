@@ -124,11 +124,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 			<div class="col-sm-5 header-social">		
 					<ul >
-						<li><a href="#"><i></i></a></li>
-						<li><a href="#"><i class="ic1"></i></a></li>
-						<li><a href="#"><i class="ic2"></i></a></li>
-						<li><a href="#"><i class="ic3"></i></a></li>
-						<li><a href="#"><i class="ic4"></i></a></li>
+                        <li><a href="#"><i class="tw"></i></a></li>
+                        <li><a href="#"><i class="fb"></i></a></li>
+                        <li><a href="#"><i class="dr"></i></a></li>
+                        <li><a href="#"><i class="li"></i></a></li>
+                        <li><a href="#"><i class="rss"></i></a></li>
 					</ul>
 					
 			</div>

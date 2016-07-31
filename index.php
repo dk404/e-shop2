@@ -9,6 +9,9 @@ if($_GET["logout"] == 1){
 	require_once "functions/logout.php";
 }
 
+//Получаем данные о соцсетях
+$socials = db_select("SELECT * FROM socials")['items'];
+
 
 
 ?>
@@ -28,7 +31,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <?php if($admin === true):?>
         <link rel="stylesheet" href="css/adm_elements.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="js/face/admBar.min.js"></script>
     <?php endif;?>
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!--//theme-style-->
@@ -93,11 +95,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 			<div class="col-sm-5 header-social">
 				<ul >
-					<li><a href="#"><i></i></a></li>
-					<li><a href="#"><i class="ic1"></i></a></li>
-					<li><a href="#"><i class="ic2"></i></a></li>
-					<li><a href="#"><i class="ic3"></i></a></li>
-					<li><a href="#"><i class="ic4"></i></a></li>
+					<li><a href="#"><i class="tw"></i></a></li>
+					<li><a href="#"><i class="fb"></i></a></li>
+					<li><a href="#"><i class="dr"></i></a></li>
+					<li><a href="#"><i class="li"></i></a></li>
+					<li><a href="#"><i class="rss"></i></a></li>
 				</ul>
 
 			</div>
@@ -749,9 +751,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <a href="#" class="tymbler"><i class="material-icons">&#xE23E;</i></a>
         <ul class="listBtns">
             <li>
-                <a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать старницу</a>
+                <a href="adm/page_settings.php?method_name=edit&ID=<? echo $resInfo["ID"] ?>">Редактировать страницу</a>
             </li>
-
         </ul>
     </section>
     <script src="js/face/admBar.min.js"></script>
