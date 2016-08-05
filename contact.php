@@ -1,72 +1,67 @@
-<?php
+<?
 require_once("functions/DB.php");
-require_once("functions/proverki.php");
-require_once("functions/saveImg.php");
 require_once("functions/auth.php");
 require_once("functions/path.php");
+require_once("functions/product.php");
 
 /*------------------------------
 Общие настройки
 -------------------------------*/
-$stranica = "login";
+$stranica = "contact";
+$this_page = path_withoutGet();
 $me = is_auth();
 $Admin = is_admin();
 
-/*------------------------------
-Logout
--------------------------------*/
-if($_GET["logout"]){ auth_exit(); header("Location: index.php"); }
 
 /*------------------------------
-Если была передана форма
+Если была отправленна форма
 -------------------------------*/
-if(isset($_POST["method_name"])):
+if($_POST["method_name"] == "send-email" && !$_POST["email"] && proverka_email($_POST["ghtt"])){
 
-    switch ($_POST["method_name"]):
-        case $_POST["method_name"] == "auth" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) && $_POST["pass"]:
-            $email  = strtolower(filter_var($_POST["email"]));
-            $pass   = proverka1($_POST["pass"]);
+    require_once("functions/Mail.php");
+    $M = new email_Mail();
 
-            $resDb = db_row("SELECT * FROM users WHERE email='".$email."' AND pass='".md5($pass)."'")["item"];
-            if($resDb){
-                setcookie("ID", $resDb["ID"], strtotime("+1 day"), "/");
-                setcookie("token", $resDb["pass"], strtotime("+1 day"), "/");
-            }
+    //Формируем запрос
+    $M->From($_POST["nickname"].";".$_POST["ghtt"]);
+    $M->To("blabla@mail.com");
+    $M->Subject($_POST["subject"]);
+    $M->Body($_POST["text"]);
+    $M->log_on(true);
+    $M->Send();
 
-            echo "
-                        <script>
-                            window.location = 'index.php';
-                        </script>";
+    if(!$M->status_mail['status']){
+        echo "<script>alert('".$M->status_mail['message']."')</script>";
+    }else{
+        echo "<script>alert('Спасибо, ваше сообщение отправленно')</script>";
+    }
+
+}
 
 
-            break;
-    endswitch;
-
-endif;
 
 
 /*------------------------------
 Достенем инфо про эту страницу
 -------------------------------*/
 $pageInfo = db_row("SELECT * FROM page_settings WHERE stranica='".$stranica."'")["item"];
-if($pageInfo){ $pageInfo["meta"] = json_decode($pageInfo["meta"], true); }
+if($pageInfo){
+    $pageInfo["meta"] = json_decode($pageInfo["meta"], true);
+    $pageInfo["dop_settings"] = json_decode(stripslashes($pageInfo["dop_settings"]), true);
+}
+
 
 
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title><? echo $pageInfo["meta"]["title"]; ?></title>
+    <title>Shopin A Ecommerce Category Flat Bootstrap Responsive Website Template | Contact :: w3layouts</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
     <!-- Custom Theme files -->
     <!--theme-style-->
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <!--//theme-style-->
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="css/admElements.css" />
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="<? echo $pageInfo["meta"]["keywords"]; ?>" />
@@ -76,6 +71,15 @@ if($pageInfo){ $pageInfo["meta"] = json_decode($pageInfo["meta"], true); }
     <!--theme-style-->
     <link href="css/style4.css" rel="stylesheet" type="text/css" media="all" />
     <!--//theme-style-->
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/admElements.css" />
+    <link rel="stylesheet" href="css/dopElems.css" />
+
+
+
+
+
     <script src="js/jquery.min.js"></script>
     <!--- start-rate---->
     <script src="js/jstarbox.js"></script>
@@ -110,51 +114,110 @@ if($pageInfo){ $pageInfo["meta"] = json_decode($pageInfo["meta"], true); }
 <!--banner-->
 <div class="banner-top">
     <div class="container">
-        <h1>Login</h1>
+        <h1>Contact</h1>
         <em></em>
-        <h2><a href="index.php">Home</a><label>/</label>Login</a></h2>
+        <h2><a href="index.php">Home</a><label>/</label>Contact</a></h2>
     </div>
 </div>
-<!--login-->
-<div class="container">
-    <div class="login">
 
-        <form action="<? echo path_withoutGet(); ?>" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="method_name" value="auth">
+<div class="contact">
 
-            <div class="col-md-6 login-do">
-                <div class="login-mail">
-                    <input type="text" name="email" placeholder="Email" required="">
-                    <i  class="glyphicon glyphicon-envelope"></i>
-                </div>
-                <div class="login-mail">
-                    <input type="password" name="pass" placeholder="Password" required="">
-                    <i class="glyphicon glyphicon-lock"></i>
-                </div>
-                <a class="news-letter " href="#">
-                    <label class="checkbox1"><input type="checkbox" name="checkbox" ><i> </i>Forget Password</label>
-                </a>
-                <label class="hvr-skew-backward">
-                    <input type="submit" value="login">
-                </label>
-            </div>
-            <div class="col-md-6 login-right">
-                <h3><? echo $pageInfo["title"] ?></h3>
-
+    <div class="contact-form">
+        <div class="container">
+            <div class="col-md-6 contact-left">
+                <h3><? echo $pageInfo["title"]; ?></h3>
                 <? echo $pageInfo["text"]; ?>
 
-                <a href="register.php" class=" hvr-skew-backward">Register</a>
 
+                <? if($pageInfo["dop_settings"]): ?>
+                <div class="address">
+
+                    <? if($pageInfo["dop_settings"]["address"]){ ?>
+                    <div class=" address-grid">
+                        <i class="glyphicon glyphicon-map-marker"></i>
+                        <div class="address1">
+                            <h3>Address</h3>
+                            <p><? echo $pageInfo["dop_settings"]["address"] ?></p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <? } ?>
+
+                    <? if($pageInfo["dop_settings"]["phone"]){ ?>
+                    <div class=" address-grid ">
+                        <i class="glyphicon glyphicon-phone"></i>
+                        <div class="address1">
+                            <h3>Our Phone:<h3>
+                            <p><? echo $pageInfo["dop_settings"]["address"] ?></p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <? } ?>
+
+
+                    <? if($pageInfo["dop_settings"]["email"]){ ?>
+                    <div class=" address-grid ">
+                        <i class="glyphicon glyphicon-envelope"></i>
+                        <div class="address1">
+                            <h3>Email:</h3>
+                            <p><a href="mailto:<? echo $pageInfo["dop_settings"]["email"] ?>"><? echo $pageInfo["dop_settings"]["email"] ?></a></p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <? } ?>
+
+                    <? if($pageInfo["dop_settings"]["hours"]){ ?>
+                    <div class=" address-grid ">
+                        <i class="glyphicon glyphicon-bell"></i>
+                        <div class="address1">
+                            <h3>Open Hours:</h3>
+                            <p><? echo $pageInfo["dop_settings"]["hours"] ?></p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <? } ?>
+
+                </div>
+                <? endif; ?>
             </div>
-
-            <div class="clearfix"> </div>
-        </form>
+            <div class="col-md-6 contact-top">
+                <h3>Want to work with me?</h3>
+                <form action="<? echo $this_page ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="method_name" value="send-email">
+                    <div>
+                        <span>Your Name </span>
+                        <input type="text" name="nickname" value="" >
+                    </div>
+                    <div>
+                        <span>Your Email </span>
+                        <input type="text" name="ghtt" value="" >
+                    </div>
+                    <div>
+                        <span>Subject</span>
+                        <input type="text" name="subject" value="" >
+                    </div>
+                    <div>
+                        <span>Your Message</span>
+                        <textarea name="text"> </textarea>
+                    </div>
+                    <input type="text" name="email" class="i-h">
+                    <label class="hvr-skew-backward">
+                        <input type="submit" value="Send" >
+                    </label>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
 
+    <? if($pageInfo["dop_settings"]["map"]){ ?>
+    <div class="map">
+        <? echo $pageInfo["dop_settings"]["map"] ?>
+    </div>
+    <? } ?>
 </div>
 
-<!--//login-->
-
+<!--//contact-->
 <!--brand-->
 <div class="container">
     <div class="brand">
@@ -238,8 +301,6 @@ if($pageInfo){ $pageInfo["meta"] = json_decode($pageInfo["meta"], true); }
     </div>
 </div>
 <!--//footer-->
-
-
 <? if(is_admin()): ?>
     <!--Админ панель-->
     <section id="admBar">
@@ -264,13 +325,16 @@ if($pageInfo){ $pageInfo["meta"] = json_decode($pageInfo["meta"], true); }
 
 <? endif; ?>
 
+
+
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
 <script src="js/simpleCart.min.js"> </script>
 <!-- slide -->
 <script src="js/bootstrap.min.js"></script>
-
 <script src="js/face/admBar.js" type="text/javascript"></script>
+
 
 </body>
 </html>

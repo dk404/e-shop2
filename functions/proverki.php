@@ -26,3 +26,12 @@ function proverka2($str){
     return $str;
 }
 
+/**
+ * Проверка email
+ * @param $email
+ * @return mixed
+ */
+function proverka_email($email){
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+

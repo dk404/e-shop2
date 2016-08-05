@@ -37,6 +37,24 @@ function write_to_db(){
     ];
 
     $arr["meta"] = addslashes(json_encode($arr["meta"]));
+
+    switch ($_POST["stranica"]):
+        case "contact":
+            $tmp = [
+                "address" => proverka1($_POST["dop"]["address"])
+                ,"phone" => proverka1($_POST["dop"]["phone"])
+                ,"email" => proverka1($_POST["dop"]["email"])
+                ,"hours" => proverka1($_POST["dop"]["hours"])
+                ,"map" => proverka2($_POST["dop"]["map"])
+            ];
+
+            $arr["dop_settings"] = addslashes(json_encode($tmp));
+            break;
+
+    endswitch;
+
+
+
     $response  = db_duplicate_update($table, [0 => $arr]);
 
     return $response;
@@ -59,7 +77,12 @@ endif;
 Вывод записи
 -------------------------------*/
 $resItem = db_row("SELECT * FROM ".$table." WHERE stranica='".$stranica."'")["item"];
-if($resItem){$resItem["meta"] = json_decode($resItem["meta"], true);}
+if($resItem){
+    $resItem["meta"] = json_decode($resItem["meta"], true);
+    $resItem["dop_settings"] = json_decode(stripslashes($resItem["dop_settings"]), true);
+
+
+}
 
 
 ?>
@@ -96,6 +119,25 @@ if($resItem){$resItem["meta"] = json_decode($resItem["meta"], true);}
         <input type="text" name="meta[desc]" value="<? echo @$resItem["meta"]["desc"]; ?>" placeholder="meta[desc]"/><br><br>
         <input type="text" name="meta[keywords]" value="<? echo @$resItem["meta"]["keywords"]; ?>" placeholder="meta[keywords]"/><br><br>
         <textarea name="text" class="js-ckeditor"><? echo @$resItem["text"]; ?></textarea><br><br>
+
+
+        <? switch ($stranica):
+            case "contact": ?>
+
+                <p><b>Дополнительные поля</b></p>
+                <input type="text" name="dop[address]" value="<? echo $resItem["dop_settings"]["address"] ?>" placeholder="address"><br><br>
+                <input type="text" name="dop[phone]" value="<? echo $resItem["dop_settings"]["phone"] ?>" placeholder="phone"><br><br>
+                <input type="text" name="dop[email]" value="<? echo $resItem["dop_settings"]["email"] ?>" placeholder="email"><br><br>
+                <input type="text" name="dop[hours]" value="<? echo $resItem["dop_settings"]["hours"] ?>" placeholder="hours"><br><br>
+                <textarea name="dop[map]" placeholder="map html"><? echo $resItem["dop_settings"]["map"] ?></textarea><br><br>
+
+
+
+                <? break;
+
+        endswitch; ?>
+
+
 
         <input name="submit" type="submit" value="готово"/>
     </form>
